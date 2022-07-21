@@ -3,7 +3,6 @@ package com.example.mockserverdemo;
 import static io.restassured.RestAssured.given;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.ResourceUtils;
@@ -22,9 +21,9 @@ class RestApiTests {
 
   @Test
   void testGetWithParam() {
-    Org org = given().queryParam("org", "solera")
-        .when().get("https://httpbin.org/get").as(Org.class);
-    Assertions.assertThat(org.getOrgName()).isEqualTo("solera");
+    given().queryParam("orgName", "solera")
+        .when().get("https://httpbin.org/get")
+        .then().log().all().assertThat().statusCode(200);
   }
 
   @Test
@@ -82,20 +81,6 @@ class RestApiTests {
         .assertThat()
         .statusCode(200)
         .header("Content-Type", "application/json");
-  }
-
-  @Test
-  void testPostWithJsonToObject() throws FileNotFoundException {
-    Org org = new Org();
-    org.setId("1");
-    org.setOrgName("solera");
-
-    org = given()
-        .contentType(ContentType.JSON)
-        .body(org)
-        .when().post("https://httpbin.org/post").as(Org.class);
-
-    Assertions.assertThat(org.getOrgName()).isEqualTo("solera");
   }
 
 }

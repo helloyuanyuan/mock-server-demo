@@ -19,12 +19,14 @@ class MockServerDemoTests {
 
   @Test
   void testGet() {
-    mockServerUtils.createExpectation("GET", "/hello", 200, "Hello World!");
+    String body = "Hello World!";
 
-    String str = given()
+    mockServerUtils.createExpectation("GET", "/hello", 200, body);
+
+    body = given()
         .then().log().all().statusCode(200)
         .when().get("http://localhost:1080/hello").asString();
-    Assertions.assertThat(str).isEqualTo("Hello World!");
+    Assertions.assertThat(body).isEqualTo("Hello World!");
   }
 
   @Test

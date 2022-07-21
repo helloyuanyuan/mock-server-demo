@@ -6,6 +6,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.mockserver.model.Header;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.example.mockserverdemo.beans.Org;
@@ -21,14 +22,14 @@ class MockServerGetTests {
 
   @AfterAll
   void tearDown() {
-    // mockServerUtils.reset();
+    mockServerUtils.reset();
   }
 
   @Test
   void testGetReturnString() {
     String body = "Hello World!";
 
-    mockServerUtils.createExpectation("GET", "/hello", 200, body);
+    mockServerUtils.createGetExpectation("/hello", 200, body);
 
     body = given()
         .then().log().all().statusCode(200)
@@ -46,7 +47,8 @@ class MockServerGetTests {
 
     String body = new ObjectMapper().writeValueAsString(org);
 
-    mockServerUtils.createExpectation("GET", "/org", 200, "orgName", "solera", body);
+    mockServerUtils.createGetExpectation("/org", "orgName", "solera", 200,
+        new Header("Content-Type", "application/json"), body);
 
     org = given()
         .queryParam("orgName", "solera")

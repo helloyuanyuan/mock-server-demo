@@ -4,6 +4,7 @@ import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
 import org.mockserver.client.MockServerClient;
 import org.mockserver.model.ClearType;
+import org.mockserver.model.Header;
 import org.mockserver.verify.VerificationTimes;
 import org.springframework.stereotype.Component;
 
@@ -36,19 +37,28 @@ public class MockServerUtils {
             VerificationTimes.atLeast(times));
   }
 
-  public void createExpectation(String method, String path, int statusCode, String body) {
+  public void createGetExpectation(String path, int statusCode, String rspBody) {
     mockServerClient()
-        .when(request().withMethod(method).withPath(path))
-        .respond(response().withStatusCode(statusCode).withBody(body));
+        .when(request().withMethod("GET").withPath(path))
+        .respond(response().withStatusCode(statusCode).withBody(rspBody));
   }
 
-  public void createExpectation(String method, String path, int statusCode, String paramName,
-      String paramValue, String body) {
+  public void createGetExpectation(String path, String paramName,
+      String paramValue, int statusCode, Header rspHeader, String rspBody) {
     mockServerClient()
-        .when(request().withMethod(method).withPath(path)
+        .when(request().withMethod("GET").withPath(path)
             .withQueryStringParameter(paramName, paramValue))
-        .respond(response().withHeader("Content-Type", "application/json")
-            .withStatusCode(statusCode).withBody(body));
+        .respond(response().withStatusCode(statusCode)
+            .withHeader(rspHeader).withBody(rspBody));
+  }
+
+  public void createPostExpectation(String path, Header reqHeader, String reqBody, int statusCode,
+      Header rspHeader, String rspBody) {
+    mockServerClient()
+        .when(request().withMethod("POST").withPath(path)
+            .withHeader(reqHeader).withBody(reqBody))
+        .respond(response().withStatusCode(statusCode)
+            .withHeader(rspHeader).withBody(rspBody));
   }
 
 }

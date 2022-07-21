@@ -12,13 +12,13 @@ import io.restassured.http.ContentType;
 import io.restassured.parsing.Parser;
 
 @SpringBootTest
-class MockServerDemoTests {
+class MockServerGetTests {
 
   @Autowired
   MockServerUtils mockServerUtils;
 
   @Test
-  void testGet() {
+  void testGetReturnString() {
     String body = "Hello World!";
 
     mockServerUtils.createExpectation("GET", "/hello", 200, body);
@@ -30,7 +30,7 @@ class MockServerDemoTests {
   }
 
   @Test
-  void testGetWithParam() throws Exception {
+  void testGetWithParamReturnJsonToClass() throws Exception {
     Org org = new Org();
     org.setId("1");
     org.setOrgName("solera");

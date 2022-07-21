@@ -11,8 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.example.mockserverdemo.beans.Org;
 import com.example.mockserverdemo.utils.MockServerUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.restassured.http.ContentType;
-import io.restassured.parsing.Parser;
 
 @SpringBootTest
 @TestInstance(Lifecycle.PER_CLASS)
@@ -23,7 +21,7 @@ class MockServerGetTests {
 
   @AfterAll
   void tearDown() {
-    mockServerUtils.reset();
+    // mockServerUtils.reset();
   }
 
   @Test
@@ -51,9 +49,8 @@ class MockServerGetTests {
     mockServerUtils.createExpectation("GET", "/org", 200, "orgName", "solera", body);
 
     org = given()
-        .contentType(ContentType.JSON)
         .queryParam("orgName", "solera")
-        .then().defaultParser(Parser.JSON).log().all().statusCode(200)
+        .then().log().all().statusCode(200)
         .when().get("http://localhost:1080/org").as(Org.class);
     Assertions.assertThat(org.getId()).isEqualTo("1");
     Assertions.assertThat(org.getOrgName()).isEqualTo("solera");

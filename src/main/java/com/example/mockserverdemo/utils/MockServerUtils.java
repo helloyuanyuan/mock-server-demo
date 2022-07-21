@@ -4,7 +4,6 @@ import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
 import org.mockserver.client.MockServerClient;
 import org.mockserver.model.ClearType;
-import org.mockserver.model.Header;
 import org.mockserver.verify.VerificationTimes;
 import org.springframework.stereotype.Component;
 
@@ -47,9 +46,9 @@ public class MockServerUtils {
       String paramValue, String body) {
     mockServerClient()
         .when(request().withMethod(method).withPath(path)
-            .withHeader(new Header("Content-Type", "application/json"))
             .withQueryStringParameter(paramName, paramValue))
-        .respond(response().withStatusCode(statusCode).withBody(body));
+        .respond(response().withHeader("Content-Type", "application/json")
+            .withStatusCode(statusCode).withBody(body));
   }
 
 }

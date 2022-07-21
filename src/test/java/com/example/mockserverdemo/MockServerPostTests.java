@@ -12,10 +12,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.example.mockserverdemo.beans.Org;
 import com.example.mockserverdemo.utils.MockServerUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.restassured.http.ContentType;
 
 @SpringBootTest
 @TestInstance(Lifecycle.PER_CLASS)
-class MockServerGetTests {
+class MockServerPostTests {
 
   @Autowired
   MockServerUtils mockServerUtils;
@@ -26,38 +27,27 @@ class MockServerGetTests {
   }
 
   @Test
-  void testGetReturnStringBody() {
-    String body = "Hello World!";
-
-    mockServerUtils.createGetExpectation("/hello", 200, body);
-
-    body = given()
-        .then().log().all().statusCode(200)
-        .when().get("http://localhost:1080/hello").asString();
-    Assertions.assertThat(body).isEqualTo("Hello World!");
-
-    mockServerUtils.verify("/hello", 1);
-  }
-
-  @Test
-  void testGetWithParamReturnJsonBodyToClass() throws Exception {
+  void testPostWithJsonBodyReturnJsonBodyToClass() throws Exception {
     Org org = new Org();
     org.setId("1");
     org.setOrgName("solera");
 
     String body = new ObjectMapper().writeValueAsString(org);
 
-    mockServerUtils.createGetExpectation("/org", "orgName", "solera", 200,
+    mockServerUtils.createPostExpectation("/org/create",
+        new Header("Content-Type", "application/json"),
+        body, 200,
         new Header("Content-Type", "application/json"), body);
 
     org = given()
-        .queryParam("orgName", "solera")
+        .contentType(ContentType.JSON)
+        .body(org)
         .then().log().all().statusCode(200)
-        .when().get("http://localhost:1080/org").as(Org.class);
+        .when().post("http://localhost:1080/org/create").as(Org.class);
     Assertions.assertThat(org.getId()).isEqualTo("1");
     Assertions.assertThat(org.getOrgName()).isEqualTo("solera");
 
-    mockServerUtils.verify("/org", 1);
+    mockServerUtils.verify("/org/create", 1);
   }
 
 }

@@ -2,7 +2,10 @@ package com.example.mockserverdemo;
 
 import static io.restassured.RestAssured.given;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.example.mockserverdemo.beans.Org;
@@ -12,10 +15,16 @@ import io.restassured.http.ContentType;
 import io.restassured.parsing.Parser;
 
 @SpringBootTest
+@TestInstance(Lifecycle.PER_CLASS)
 class MockServerGetTests {
 
   @Autowired
   MockServerUtils mockServerUtils;
+
+  @AfterAll
+  void tearDown() {
+    mockServerUtils.reset();
+  }
 
   @Test
   void testGetReturnString() {
@@ -27,6 +36,8 @@ class MockServerGetTests {
         .then().log().all().statusCode(200)
         .when().get("http://localhost:1080/hello").asString();
     Assertions.assertThat(body).isEqualTo("Hello World!");
+
+    mockServerUtils.verify("/hello", 1);
   }
 
   @Test
@@ -46,6 +57,8 @@ class MockServerGetTests {
         .when().get("http://localhost:1080/org").as(Org.class);
     Assertions.assertThat(org.getId()).isEqualTo("1");
     Assertions.assertThat(org.getOrgName()).isEqualTo("solera");
+
+    mockServerUtils.verify("/org", 1);
   }
 
 }

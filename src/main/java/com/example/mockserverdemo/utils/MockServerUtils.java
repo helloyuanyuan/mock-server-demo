@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class MockServerUtils {
 
-  private final String HOST = PropertyUtils.getInstance().getHost();
-  private final int PORT = Integer.parseInt(PropertyUtils.getInstance().getPort());
+  private static final String HOST = PropertyUtils.getInstance().getHost();
+  private static final int PORT = Integer.parseInt(PropertyUtils.getInstance().getPort());
 
   public MockServerClient mockServerClient() {
     return new MockServerClient(HOST, PORT);
@@ -35,6 +35,19 @@ public class MockServerUtils {
             request()
                 .withPath(path),
             VerificationTimes.atLeast(times));
+  }
+
+  public void verify(String path, String method) {
+    mockServerClient()
+        .verify(
+            request()
+                .withPath(path)
+                .withMethod(method));
+  }
+
+  public void verifyZero() {
+    mockServerClient()
+        .verifyZeroInteractions();
   }
 
   public void createGetExpectation(String path, int statusCode, String rspBody) {

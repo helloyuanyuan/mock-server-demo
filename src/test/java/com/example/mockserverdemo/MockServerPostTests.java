@@ -47,7 +47,8 @@ class MockServerPostTests {
     Assertions.assertThat(org.getId()).isEqualTo("1");
     Assertions.assertThat(org.getOrgName()).isEqualTo("solera");
 
-    mockServerUtils.verify("/org/create", 1);
+    mockServerUtils.verify("/org/create", "POST");
+
   }
 
 }

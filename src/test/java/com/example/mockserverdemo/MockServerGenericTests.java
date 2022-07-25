@@ -6,7 +6,7 @@ import static org.mockserver.model.HttpResponse.response;
 import java.util.UUID;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -25,7 +25,7 @@ class MockServerGenericTests {
   @Autowired
   MockServerUtils mockServerUtils;
 
-  @AfterEach
+  @BeforeEach
   void tearDown() {
     mockServerUtils.reset();
   }

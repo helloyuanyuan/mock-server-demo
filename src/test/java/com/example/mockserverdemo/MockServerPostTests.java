@@ -1,6 +1,8 @@
 package com.example.mockserverdemo;
 
 import static io.restassured.RestAssured.given;
+import static org.mockserver.model.HttpRequest.request;
+import static org.mockserver.model.HttpResponse.response;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
@@ -34,10 +36,11 @@ class MockServerPostTests {
 
     String body = new ObjectMapper().writeValueAsString(org);
 
-    mockServerUtils.createPostExpectation("/org/create",
-        new Header("Content-Type", "application/json"),
-        body, 200,
-        new Header("Content-Type", "application/json"), body);
+    MockServerUtils.client
+        .when(request().withMethod("POST").withPath("/org/create")
+            .withHeader(new Header("Content-Type", "application/json")).withBody(body))
+        .respond(response().withStatusCode(200)
+            .withHeader(new Header("Content-Type", "application/json")).withBody(body));
 
     org = given()
         .contentType(ContentType.JSON)

@@ -1,10 +1,8 @@
 package com.example.mockserverdemo.utils;
 
 import static org.mockserver.model.HttpRequest.request;
-import static org.mockserver.model.HttpResponse.response;
 import org.mockserver.client.MockServerClient;
 import org.mockserver.model.ClearType;
-import org.mockserver.model.Header;
 import org.mockserver.verify.VerificationTimes;
 import org.springframework.stereotype.Component;
 
@@ -14,23 +12,21 @@ public class MockServerUtils {
   private static final String HOST = PropertyUtils.getInstance().getHost();
   private static final int PORT = Integer.parseInt(PropertyUtils.getInstance().getPort());
 
-  public MockServerClient mockServerClient() {
-    return new MockServerClient(HOST, PORT);
-  }
+  public static final MockServerClient client = new MockServerClient(HOST, PORT);
 
   public void reset() {
-    mockServerClient().reset();
+    client.reset();
   }
 
   public void clear(String path, ClearType clearType) {
-    mockServerClient().clear(
+    client.clear(
         request()
             .withPath(path),
         clearType);
   }
 
   public void verify(String path, int times) {
-    mockServerClient()
+    client
         .verify(
             request()
                 .withPath(path),
@@ -38,7 +34,7 @@ public class MockServerUtils {
   }
 
   public void verify(String path, String method) {
-    mockServerClient()
+    client
         .verify(
             request()
                 .withPath(path)
@@ -46,32 +42,8 @@ public class MockServerUtils {
   }
 
   public void verifyZero() {
-    mockServerClient()
+    client
         .verifyZeroInteractions();
-  }
-
-  public void createGetExpectation(String path, int statusCode, String rspBody) {
-    mockServerClient()
-        .when(request().withMethod("GET").withPath(path))
-        .respond(response().withStatusCode(statusCode).withBody(rspBody));
-  }
-
-  public void createGetExpectation(String path, String paramName,
-      String paramValue, int statusCode, Header rspHeader, String rspBody) {
-    mockServerClient()
-        .when(request().withMethod("GET").withPath(path)
-            .withQueryStringParameter(paramName, paramValue))
-        .respond(response().withStatusCode(statusCode)
-            .withHeader(rspHeader).withBody(rspBody));
-  }
-
-  public void createPostExpectation(String path, Header reqHeader, String reqBody, int statusCode,
-      Header rspHeader, String rspBody) {
-    mockServerClient()
-        .when(request().withMethod("POST").withPath(path)
-            .withHeader(reqHeader).withBody(reqBody))
-        .respond(response().withStatusCode(statusCode)
-            .withHeader(rspHeader).withBody(rspBody));
   }
 
 }

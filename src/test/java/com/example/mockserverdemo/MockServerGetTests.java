@@ -1,6 +1,8 @@
 package com.example.mockserverdemo;
 
 import static io.restassured.RestAssured.given;
+import static org.mockserver.model.HttpRequest.request;
+import static org.mockserver.model.HttpResponse.response;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
@@ -29,7 +31,8 @@ class MockServerGetTests {
   void testGetReturnStringBody() {
     String body = "Hello World!";
 
-    mockServerUtils.createGetExpectation("/hello", 200, body);
+    MockServerUtils.client.when(request().withMethod("GET").withPath("/hello"))
+        .respond(response().withStatusCode(200).withBody(body));
 
     body = given()
         .then().log().all().statusCode(200)
@@ -47,8 +50,11 @@ class MockServerGetTests {
 
     String body = new ObjectMapper().writeValueAsString(org);
 
-    mockServerUtils.createGetExpectation("/org", "orgName", "solera", 200,
-        new Header("Content-Type", "application/json"), body);
+    MockServerUtils.client
+        .when(request().withMethod("GET").withPath("/org")
+            .withQueryStringParameter("orgName", "solera"))
+        .respond(response().withStatusCode(200)
+            .withHeader(new Header("Content-Type", "application/json")).withBody(body));
 
     org = given()
         .queryParam("orgName", "solera")

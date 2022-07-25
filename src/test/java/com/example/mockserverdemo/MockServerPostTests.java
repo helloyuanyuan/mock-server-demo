@@ -4,7 +4,7 @@ import static io.restassured.RestAssured.given;
 import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -23,7 +23,7 @@ class MockServerPostTests {
   @Autowired
   MockServerUtils mockServerUtils;
 
-  @AfterAll
+  @AfterEach
   void tearDown() {
     mockServerUtils.reset();
   }

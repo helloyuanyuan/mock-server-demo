@@ -34,7 +34,7 @@ class MockServerGetTests {
     MockServerUtils.client.when(request().withMethod("GET").withPath("/hello"))
         .respond(response().withStatusCode(200).withBody(body));
 
-    body = given()
+    body = given().log().all()
         .then().log().all().statusCode(200)
         .when().get("http://localhost:1080/hello").asString();
     Assertions.assertThat(body).isEqualTo("Hello World!");
@@ -56,7 +56,7 @@ class MockServerGetTests {
         .respond(response().withStatusCode(200)
             .withHeader(new Header("Content-Type", "application/json")).withBody(body));
 
-    org = given()
+    org = given().log().all()
         .queryParam("orgName", "solera")
         .then().log().all().statusCode(200)
         .when().get("http://localhost:1080/org").as(Org.class);

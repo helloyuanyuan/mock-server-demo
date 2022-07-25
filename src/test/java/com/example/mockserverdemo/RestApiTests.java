@@ -14,21 +14,22 @@ class RestApiTests {
 
   @Test
   void testGet() {
-    given()
+    given().log().all()
         .when().get("https://httpbin.org/get")
         .then().log().all().assertThat().statusCode(200);
   }
 
   @Test
   void testGetWithParam() {
-    given().queryParam("orgName", "solera")
+    given().log().all()
+        .queryParam("orgName", "solera")
         .when().get("https://httpbin.org/get")
         .then().log().all().assertThat().statusCode(200);
   }
 
   @Test
   void testPostWithForm() {
-    given()
+    given().log().all()
         .contentType("application/x-www-form-urlencoded; charset=UTF-8")
         .formParam("org", "solera")
         .when().post("https://httpbin.org/post")
@@ -37,7 +38,7 @@ class RestApiTests {
 
   @Test
   void testPostWithMultiPart() throws FileNotFoundException {
-    given()
+    given().log().all()
         .multiPart(ResourceUtils.getFile(this.getClass().getResource("/test.file")))
         .when().post("https://httpbin.org/post")
         .then().log().all().assertThat().statusCode(200);
@@ -45,7 +46,7 @@ class RestApiTests {
 
   @Test
   void testPostWithXml() throws FileNotFoundException {
-    given()
+    given().log().all()
         .contentType(ContentType.XML)
         .body(ResourceUtils.getFile(this.getClass().getResource("/test.xml")))
         .when().post("https://httpbin.org/post")
@@ -58,7 +59,7 @@ class RestApiTests {
     HashMap<String, String> map = new HashMap<>();
     map.put("id", "1");
     map.put("orgName", "solera");
-    given()
+    given().log().all()
         .contentType(ContentType.JSON)
         .body(map)
         .when().post("https://httpbin.org/post")
@@ -73,7 +74,7 @@ class RestApiTests {
     Org org = new Org();
     org.setId("1");
     org.setOrgName("solera");
-    given()
+    given().log().all()
         .contentType(ContentType.JSON)
         .body(org)
         .when().post("https://httpbin.org/post")

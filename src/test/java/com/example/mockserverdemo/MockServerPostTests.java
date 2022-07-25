@@ -42,7 +42,7 @@ class MockServerPostTests {
         .respond(response().withStatusCode(200)
             .withHeader(new Header("Content-Type", "application/json")).withBody(body));
 
-    org = given()
+    org = given().log().all()
         .contentType(ContentType.JSON)
         .body(org)
         .then().log().all().statusCode(200)
@@ -51,7 +51,6 @@ class MockServerPostTests {
     Assertions.assertThat(org.getOrgName()).isEqualTo("solera");
 
     mockServerUtils.verify("/org/create", "POST");
-
   }
 
 }

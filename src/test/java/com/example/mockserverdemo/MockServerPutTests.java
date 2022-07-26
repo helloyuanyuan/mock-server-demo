@@ -34,23 +34,28 @@ class MockServerPutTests {
     org.setId("1");
     org.setOrgName("solera");
 
+    Org orgUpdated = new Org();
+    orgUpdated.setId("1");
+    orgUpdated.setOrgName("soleraUpdated");
+
     String body = new ObjectMapper().writeValueAsString(org);
+    String bodyUpdated = new ObjectMapper().writeValueAsString(orgUpdated);
 
     MockServerUtils.client
         .when(request().withMethod("PUT").withPath("/org/{orgId}")
             .withPathParameter("orgId", "^\\d+$")
             .withHeader(new Header("Content-Type", "application/json")).withBody(body))
         .respond(response().withStatusCode(200)
-            .withHeader(new Header("Content-Type", "application/json")).withBody(body));
+            .withHeader(new Header("Content-Type", "application/json")).withBody(bodyUpdated));
 
-    org = given().log().all()
+    orgUpdated = given().log().all()
         .contentType(ContentType.JSON)
-        .pathParam("orgId", "1")
+        .pathParam("orgId", org.getId())
         .body(org)
         .then().log().all().statusCode(200)
         .when().put("http://localhost:1080/org/{orgId}").as(Org.class);
-    Assertions.assertThat(org.getId()).isEqualTo("1");
-    Assertions.assertThat(org.getOrgName()).isEqualTo("solera");
+    Assertions.assertThat(orgUpdated.getId()).isEqualTo("1");
+    Assertions.assertThat(orgUpdated.getOrgName()).isEqualTo("soleraUpdated");
   }
 
 }

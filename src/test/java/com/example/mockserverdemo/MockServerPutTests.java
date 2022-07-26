@@ -48,14 +48,15 @@ class MockServerPutTests {
         .respond(response().withStatusCode(200)
             .withHeader(new Header("Content-Type", "application/json")).withBody(bodyUpdated));
 
-    orgUpdated = given().log().all()
+    Org actualResult = given().log().all()
         .contentType(ContentType.JSON)
         .pathParam("orgId", org.getId())
         .body(org)
         .then().log().all().statusCode(200)
         .when().put("http://localhost:1080/org/{orgId}").as(Org.class);
-    Assertions.assertThat(orgUpdated.getId()).isEqualTo("1");
-    Assertions.assertThat(orgUpdated.getOrgName()).isEqualTo("soleraUpdated");
+
+    Assertions.assertThat(actualResult.getId()).isEqualTo(orgUpdated.getId());
+    Assertions.assertThat(actualResult.getOrgName()).isEqualTo(orgUpdated.getOrgName());
   }
 
 }

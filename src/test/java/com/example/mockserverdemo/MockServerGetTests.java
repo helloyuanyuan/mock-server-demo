@@ -34,10 +34,11 @@ class MockServerGetTests {
     MockServerUtils.client.when(request().withMethod("GET").withPath("/hello"))
         .respond(response().withStatusCode(200).withBody(body));
 
-    body = given().log().all()
+    String actualResult = given().log().all()
         .then().log().all().statusCode(200)
         .when().get("http://localhost:1080/hello").asString();
-    Assertions.assertThat(body).isEqualTo("Hello World!");
+
+    Assertions.assertThat(actualResult).isEqualTo(body);
 
     mockServerUtils.verify("/hello", 1);
   }
@@ -56,12 +57,13 @@ class MockServerGetTests {
         .respond(response().withStatusCode(200)
             .withHeader(new Header("Content-Type", "application/json")).withBody(body));
 
-    org = given().log().all()
+    Org actualResult = given().log().all()
         .queryParam("orgName", "solera")
         .then().log().all().statusCode(200)
         .when().get("http://localhost:1080/org").as(Org.class);
-    Assertions.assertThat(org.getId()).isEqualTo("1");
-    Assertions.assertThat(org.getOrgName()).isEqualTo("solera");
+
+    Assertions.assertThat(actualResult.getId()).isEqualTo(org.getId());
+    Assertions.assertThat(actualResult.getOrgName()).isEqualTo(org.getOrgName());
 
     mockServerUtils.verify("/org", 1);
   }

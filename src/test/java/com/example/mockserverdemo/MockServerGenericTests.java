@@ -39,32 +39,32 @@ class MockServerGenericTests {
         .when(request().withPath("/some/path"))
         .respond(response().withBody("some_response_body"));
 
-    String body = given().log().all()
+    String actualResult = given().log().all()
         .then().log().all().statusCode(200)
         .when().get("http://localhost:1080/some/path").asString();
-    Assertions.assertThat(body).isEqualTo("some_response_body");
+
+    Assertions.assertThat(actualResult).isEqualTo("some_response_body");
   }
 
   @Test
   void testCreateExpectationWithPathParameterRegex() {
     MockServerUtils.client
-        .when(
-            request()
-                .withPath("/some/path/{cartId}")
-                .withPathParameters(
-                    param("cartId", "[A-Z0-9\\-]+")))
+        .when(request().withPath("/some/path/{cartId}")
+            .withPathParameters(param("cartId", "[A-Z0-9\\-]+")))
         .respond(response().withBody("some_response_body"));
 
-    String body = given().log().all()
+    String actualResult = given().log().all()
         .pathParam("cartId", "A123")
         .then().log().all().statusCode(200)
         .when().get("http://localhost:1080/some/path/{cartId}").asString();
-    Assertions.assertThat(body).isEqualTo("some_response_body");
 
-    body = given().log().all()
+    Assertions.assertThat(actualResult).isEqualTo("some_response_body");
+
+    actualResult = given().log().all()
         .then().log().all().statusCode(200)
         .when().get("http://localhost:1080/some/path/{cartId}", "B223").asString();
-    Assertions.assertThat(body).isEqualTo("some_response_body");
+
+    Assertions.assertThat(actualResult).isEqualTo("some_response_body");
   }
 
   @Test
@@ -82,11 +82,12 @@ class MockServerGenericTests {
         .respond(response().withStatusCode(200)
             .withHeader(new Header("Content-Type", "application/json")).withBody(body));
 
-    org = given().log().all()
+    Org actualResult = given().log().all()
         .queryParam("orgName", orgName)
         .then().log().all().statusCode(200)
         .when().get("http://localhost:1080/org").as(Org.class);
-    Assertions.assertThat(org.getOrgName()).isEqualTo(orgName);
+
+    Assertions.assertThat(actualResult.getOrgName()).isEqualTo(orgName);
   }
 
   @Test
@@ -97,12 +98,13 @@ class MockServerGenericTests {
                 header("Accept.*")))
         .respond(response().withBody("some_response_body"));
 
-    String body = given().log().all()
+    String actualResult = given().log().all()
         .header(new io.restassured.http.Header("Accept", "application/json"))
         .header(new io.restassured.http.Header("Accept-Encoding", "gzip, deflate, br"))
         .then().log().all().statusCode(200)
         .when().get("http://localhost:1080/some/path").asString();
-    Assertions.assertThat(body).isEqualTo("some_response_body");
+
+    Assertions.assertThat(actualResult).isEqualTo("some_response_body");
   }
 
   @Test
@@ -114,12 +116,13 @@ class MockServerGenericTests {
                 cookie("sessionB", "4930456C-C718-476F-971F-CB8E047AB349")))
         .respond(response().withBody("some_response_body"));
 
-    String body = given().log().all()
+    String actualResult = given().log().all()
         .cookies("sessionA", "4930456C-C718-476F-971F-CB8E047AB348",
             "sessionB", "4930456C-C718-476F-971F-CB8E047AB349")
         .then().log().all().statusCode(200)
         .when().get("http://localhost:1080/some/path").asString();
-    Assertions.assertThat(body).isEqualTo("some_response_body");
+
+    Assertions.assertThat(actualResult).isEqualTo("some_response_body");
   }
 
   @Test
@@ -132,19 +135,21 @@ class MockServerGenericTests {
         .when(request().withMethod("GET").withPath("/hello")).withId(expectationID)
         .respond(response().withStatusCode(200).withBody(bodyA));
 
-    String body = given().log().all()
+    String actualResult = given().log().all()
         .then().log().all().statusCode(200)
         .when().get("http://localhost:1080/hello").asString();
-    Assertions.assertThat(body).isEqualTo("AAA");
+
+    Assertions.assertThat(actualResult).isEqualTo("AAA");
 
     MockServerUtils.client
         .when(request().withMethod("GET").withPath("/hello")).withId(expectationID)
         .respond(response().withStatusCode(200).withBody(bodyB));
 
-    body = given().log().all()
+    actualResult = given().log().all()
         .then().log().all().statusCode(200)
         .when().get("http://localhost:1080/hello").asString();
-    Assertions.assertThat(body).isEqualTo("BBB");
+
+    Assertions.assertThat(actualResult).isEqualTo("BBB");
   }
 
   @Test
@@ -158,10 +163,11 @@ class MockServerGenericTests {
     MockServerUtils.client.when(request().withMethod("GET").withPath("/hello"))
         .respond(response().withStatusCode(200).withBody(bodyB));
 
-    String body = given().log().all()
+    String actualResult = given().log().all()
         .then().log().all().statusCode(200)
         .when().get("http://localhost:1080/hello").asString();
-    Assertions.assertThat(body).isEqualTo("AAA");
+
+    Assertions.assertThat(actualResult).isEqualTo("AAA");
   }
 
   @Test
@@ -169,15 +175,18 @@ class MockServerGenericTests {
     String bodyA = "AAA";
     String bodyB = "BBB";
 
-    MockServerUtils.client.when(request().withMethod("GET").withPath("/hello")).withPriority(1)
+    MockServerUtils.client.when(request().withMethod("GET").withPath("/hello"))
+        .withPriority(1)
         .respond(response().withStatusCode(200).withBody(bodyA));
 
-    MockServerUtils.client.when(request().withMethod("GET").withPath("/hello")).withPriority(2)
+    MockServerUtils.client.when(request().withMethod("GET").withPath("/hello"))
+        .withPriority(2)
         .respond(response().withStatusCode(200).withBody(bodyB));
 
     String body = given().log().all()
         .then().log().all().statusCode(200)
         .when().get("http://localhost:1080/hello").asString();
+
     Assertions.assertThat(body).isEqualTo("BBB");
   }
 
@@ -194,20 +203,22 @@ class MockServerGenericTests {
         .when(request().withMethod("GET").withPath("/hello"), Times.exactly(1))
         .respond(response().withStatusCode(200).withBody(bodyB));
 
-    String body = given().log().all()
+    String actualResult = given().log().all()
         .then().log().all().statusCode(200)
         .when().get("http://localhost:1080/hello").asString();
-    Assertions.assertThat(body).isEqualTo("AAA");
 
-    body = given().log().all()
+    Assertions.assertThat(actualResult).isEqualTo("AAA");
+
+    actualResult = given().log().all()
         .then().log().all().statusCode(200)
         .when().get("http://localhost:1080/hello").asString();
-    Assertions.assertThat(body).isEqualTo("BBB");
 
-    String returnStatus = given().log().all()
+    Assertions.assertThat(actualResult).isEqualTo("BBB");
+
+    actualResult = given().log().all()
         .then().log().all().statusCode(404)
         .when().get("http://localhost:1080/hello").statusLine();
-    Assertions.assertThat(returnStatus).contains("Not Found");
+    Assertions.assertThat(actualResult).contains("Not Found");
   }
 
 }

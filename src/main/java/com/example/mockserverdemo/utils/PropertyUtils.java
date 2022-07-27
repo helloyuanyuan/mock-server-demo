@@ -9,55 +9,47 @@ import java.util.Properties;
 
 public class PropertyUtils {
 
-    static PropertyUtils instance;
-    Properties properties;
+  static PropertyUtils instance;
+  Properties properties;
 
-    public static PropertyUtils getInstance() {
-        if (null == instance) {
-            instance = new PropertyUtils();
+  public static PropertyUtils getInstance() {
+    if (null == instance) {
+      instance = new PropertyUtils();
+    }
+    return instance;
+  }
+
+  public PropertyUtils() {
+    String propertiesFile = loadProperties("environment/env.properties").getProperty("env");
+    propertiesFile = "environment/" + propertiesFile + ".properties";
+    this.properties = loadProperties(propertiesFile);
+  }
+
+  synchronized public static Properties loadProperties(String propertiesFile) {
+    Properties properties = new Properties();
+    InputStream in = null;
+    try {
+      in = PropertyUtils.class.getClassLoader().getResourceAsStream(propertiesFile);
+      properties.load(new InputStreamReader(in, "UTF-8"));
+    } catch (FileNotFoundException e) {
+      LogUtils.error(propertiesFile + "FILE NOT FOUND!");
+    } catch (IOException e) {
+      LogUtils.error(propertiesFile + "LOADING IOException!");
+    } finally {
+      try {
+        if (null != in) {
+          in.close();
         }
-        return instance;
+      } catch (IOException e) {
+        LogUtils.error(propertiesFile + "CLOSING IOException!");
+      }
     }
+    return properties;
+  }
 
-    public PropertyUtils() {
-        String propertiesFile = loadProperties("environment/env.properties").getProperty("env");
-        propertiesFile = "environment/" + propertiesFile + ".properties";
-        this.properties = loadProperties(propertiesFile);
-    }
-
-    synchronized public static Properties loadProperties(String propertiesFile) {
-        Properties properties = new Properties();
-        InputStream in = null;
-        try {
-            in = PropertyUtils.class.getClassLoader().getResourceAsStream(propertiesFile);
-            properties.load(new InputStreamReader(in, "UTF-8"));
-        } catch (FileNotFoundException e) {
-            LogUtils.error(propertiesFile + "FILE NOT FOUND!");
-        } catch (IOException e) {
-            LogUtils.error(propertiesFile + "LOADING IOException!");
-        } finally {
-            try {
-                if (null != in) {
-                    in.close();
-                }
-            } catch (IOException e) {
-                LogUtils.error(propertiesFile + "CLOSING IOException!");
-            }
-        }
-        return properties;
-    }
-
-    public String getProperty(String key) {
-        return properties.getProperty(key);
-    }
-
-    public String getHost() {
-        return this.getProperty("host");
-    }
-
-    public String getPort() {
-        return this.getProperty("port");
-    }
+  public String getProperty(String key) {
+    return properties.getProperty(key);
+  }
 
 }
 

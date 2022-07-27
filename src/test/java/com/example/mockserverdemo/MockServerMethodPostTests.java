@@ -18,7 +18,7 @@ import io.restassured.http.ContentType;
 
 @SpringBootTest
 @TestInstance(Lifecycle.PER_CLASS)
-class MockServerPostTests {
+class MockServerMethodPostTests {
 
   @Autowired
   MockServerUtils mockServerUtils;

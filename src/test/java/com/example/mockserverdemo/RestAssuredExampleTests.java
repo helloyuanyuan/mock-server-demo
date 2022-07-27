@@ -10,7 +10,7 @@ import com.example.mockserverdemo.beans.Org;
 import io.restassured.http.ContentType;
 
 @SpringBootTest
-class RestApiTests {
+class RestAssuredExampleTests {
 
   @Test
   void testGet() {

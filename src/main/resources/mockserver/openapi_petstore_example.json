@@ -166,6 +166,22 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Pet"
+                },
+                "examples": {
+                  "Cat": {
+                    "value": {
+                      "id": 1,
+                      "name": "Cat",
+                      "tag": "Cat"
+                    }
+                  },
+                  "Dog": {
+                    "value": {
+                      "id": 2,
+                      "name": "Dog",
+                      "tag": "Dog"
+                    }
+                  }
                 }
               }
             }

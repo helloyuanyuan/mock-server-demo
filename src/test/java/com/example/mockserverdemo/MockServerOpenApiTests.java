@@ -63,43 +63,36 @@ class MockServerOpenApiTests {
         .when(openAPI(mockServerUtils.OPEN_API_URL, "showPetById"))
         .respond(
             httpRequest -> {
-              if (httpRequest.getHeader("X-Request-ID").get(0).startsWith("200")) {
+              if (httpRequest.getPathParameters().getValues("petId").get(0).startsWith("200")) {
                 return response()
                     .withStatusCode(200)
-                    .withHeaders(
-                        new Header("Content-Type", "application/json"))
+                    .withHeaders(new Header("Content-Type", "application/json"))
                     .withBody(petString);
               }
-              if (httpRequest.getHeader("X-Request-ID").get(0).startsWith("400")) {
+              if (httpRequest.getPathParameters().getValues("petId").get(0).startsWith("400")) {
                 return response()
                     .withStatusCode(400)
-                    .withHeaders(
-                        new Header("Content-Type", "application/json"))
+                    .withHeaders(new Header("Content-Type", "application/json"))
                     .withBody(errorString400);
               } else {
                 return response()
                     .withStatusCode(500)
-                    .withHeaders(
-                        new Header("Content-Type", "application/json"))
+                    .withHeaders(new Header("Content-Type", "application/json"))
                     .withBody(errorString500);
               }
             });
 
     Pet actualResult = given().log().all()
-        .pathParam("petId", "123")
-        .header(
-            new io.restassured.http.Header("X-Request-ID",
-                "200" + UUID.randomUUID().toString().substring(3)))
+        .pathParam("petId", "200123")
+        .header(new io.restassured.http.Header("X-Request-ID", UUID.randomUUID().toString()))
         .then().log().all()
         .expect().statusCode(200)
         .when().get("http://localhost:1080/pets/{petId}").as(Pet.class);
     Assertions.assertThat(actualResult).isEqualTo(pet);
 
     Error actualResultError400 = given().log().all()
-        .pathParam("petId", "123")
-        .header(
-            new io.restassured.http.Header("X-Request-ID",
-                "400" + UUID.randomUUID().toString().substring(3)))
+        .pathParam("petId", "400123")
+        .header(new io.restassured.http.Header("X-Request-ID", UUID.randomUUID().toString()))
         .then().log().all()
         .expect().statusCode(400)
         .when().get("http://localhost:1080/pets/{petId}").as(Error.class);
@@ -107,9 +100,7 @@ class MockServerOpenApiTests {
 
     Error actualResultError500 = given().log().all()
         .pathParam("petId", "123")
-        .header(
-            new io.restassured.http.Header("X-Request-ID",
-                "500" + UUID.randomUUID().toString().substring(3)))
+        .header(new io.restassured.http.Header("X-Request-ID", UUID.randomUUID().toString()))
         .then().log().all()
         .expect().statusCode(500)
         .when().get("http://localhost:1080/pets/{petId}").as(Error.class);

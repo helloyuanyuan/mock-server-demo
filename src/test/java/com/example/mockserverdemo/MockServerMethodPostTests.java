@@ -36,7 +36,7 @@ class MockServerMethodPostTests {
 
     String body = new ObjectMapper().writeValueAsString(org);
 
-    MockServerUtils.client
+    mockServerUtils.client
         .when(request().withMethod("POST").withPath("/org/create")
             .withHeader(new Header("Content-Type", "application/json")).withBody(body))
         .respond(response().withStatusCode(200)

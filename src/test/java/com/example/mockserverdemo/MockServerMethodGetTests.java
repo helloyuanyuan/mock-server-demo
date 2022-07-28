@@ -31,7 +31,7 @@ class MockServerMethodGetTests {
   void testGetReturnStringBody() {
     String body = "Hello World!";
 
-    MockServerUtils.client.when(request().withMethod("GET").withPath("/hello"))
+    mockServerUtils.client.when(request().withMethod("GET").withPath("/hello"))
         .respond(response().withStatusCode(200).withBody(body));
 
     String actualResult = given().log().all()
@@ -51,7 +51,7 @@ class MockServerMethodGetTests {
 
     String body = new ObjectMapper().writeValueAsString(org);
 
-    MockServerUtils.client
+    mockServerUtils.client
         .when(request().withMethod("GET").withPath("/org")
             .withQueryStringParameter("orgName", "solera"))
         .respond(response().withStatusCode(200)

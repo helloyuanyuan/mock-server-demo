@@ -35,7 +35,7 @@ class MockServerGenericTests {
 
   @Test
   void testCreateExpectation() {
-    MockServerUtils.client
+    mockServerUtils.client
         .when(request().withPath("/some/path"))
         .respond(response().withBody("some_response_body"));
 
@@ -48,7 +48,7 @@ class MockServerGenericTests {
 
   @Test
   void testCreateExpectationWithPathParameterRegex() {
-    MockServerUtils.client
+    mockServerUtils.client
         .when(request().withPath("/some/path/{cartId}")
             .withPathParameters(param("cartId", "[A-Z0-9\\-]+")))
         .respond(response().withBody("some_response_body"));
@@ -76,7 +76,7 @@ class MockServerGenericTests {
 
     String body = new ObjectMapper().writeValueAsString(org);
 
-    MockServerUtils.client
+    mockServerUtils.client
         .when(request().withMethod("GET").withPath("/org")
             .withQueryStringParameter("orgName", "[A-z]{0,10}"))
         .respond(response().withStatusCode(200)
@@ -92,7 +92,7 @@ class MockServerGenericTests {
 
   @Test
   void testCreateExpectationWithHeadersRegex() {
-    MockServerUtils.client
+    mockServerUtils.client
         .when(request().withMethod("GET").withPath("/some/path")
             .withHeaders(
                 header("Accept.*")))
@@ -109,7 +109,7 @@ class MockServerGenericTests {
 
   @Test
   void testCreateExpectationWithCookies() {
-    MockServerUtils.client
+    mockServerUtils.client
         .when(request().withMethod("GET").withPath("/some/path")
             .withCookies(
                 cookie("sessionA", "4930456C-C718-476F-971F-CB8E047AB348"),
@@ -131,7 +131,7 @@ class MockServerGenericTests {
     String bodyA = "AAA";
     String bodyB = "BBB";
 
-    MockServerUtils.client
+    mockServerUtils.client
         .when(request().withMethod("GET").withPath("/hello")).withId(expectationID)
         .respond(response().withStatusCode(200).withBody(bodyA));
 
@@ -141,7 +141,7 @@ class MockServerGenericTests {
 
     Assertions.assertThat(actualResult).isEqualTo("AAA");
 
-    MockServerUtils.client
+    mockServerUtils.client
         .when(request().withMethod("GET").withPath("/hello")).withId(expectationID)
         .respond(response().withStatusCode(200).withBody(bodyB));
 
@@ -157,10 +157,10 @@ class MockServerGenericTests {
     String bodyA = "AAA";
     String bodyB = "BBB";
 
-    MockServerUtils.client.when(request().withMethod("GET").withPath("/hello"))
+    mockServerUtils.client.when(request().withMethod("GET").withPath("/hello"))
         .respond(response().withStatusCode(200).withBody(bodyA));
 
-    MockServerUtils.client.when(request().withMethod("GET").withPath("/hello"))
+    mockServerUtils.client.when(request().withMethod("GET").withPath("/hello"))
         .respond(response().withStatusCode(200).withBody(bodyB));
 
     String actualResult = given().log().all()
@@ -175,11 +175,11 @@ class MockServerGenericTests {
     String bodyA = "AAA";
     String bodyB = "BBB";
 
-    MockServerUtils.client.when(request().withMethod("GET").withPath("/hello"))
+    mockServerUtils.client.when(request().withMethod("GET").withPath("/hello"))
         .withPriority(1)
         .respond(response().withStatusCode(200).withBody(bodyA));
 
-    MockServerUtils.client.when(request().withMethod("GET").withPath("/hello"))
+    mockServerUtils.client.when(request().withMethod("GET").withPath("/hello"))
         .withPriority(2)
         .respond(response().withStatusCode(200).withBody(bodyB));
 
@@ -195,11 +195,11 @@ class MockServerGenericTests {
     String bodyA = "AAA";
     String bodyB = "BBB";
 
-    MockServerUtils.client
+    mockServerUtils.client
         .when(request().withMethod("GET").withPath("/hello"), Times.exactly(1))
         .respond(response().withStatusCode(200).withBody(bodyA));
 
-    MockServerUtils.client
+    mockServerUtils.client
         .when(request().withMethod("GET").withPath("/hello"), Times.exactly(1))
         .respond(response().withStatusCode(200).withBody(bodyB));
 

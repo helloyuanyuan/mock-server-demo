@@ -41,7 +41,7 @@ class MockServerMethodPutTests {
     String body = new ObjectMapper().writeValueAsString(org);
     String bodyUpdated = new ObjectMapper().writeValueAsString(orgUpdated);
 
-    MockServerUtils.client
+    mockServerUtils.client
         .when(request().withMethod("PUT").withPath("/org/{orgId}")
             .withPathParameter("orgId", "^\\d+$")
             .withHeader(new Header("Content-Type", "application/json")).withBody(body))

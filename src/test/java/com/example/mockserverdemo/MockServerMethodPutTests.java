@@ -24,7 +24,7 @@ class MockServerMethodPutTests {
   MockServerUtils mockServerUtils;
 
   @BeforeEach
-  void tearDown() {
+  void beforeEach() {
     mockServerUtils.reset();
   }
 

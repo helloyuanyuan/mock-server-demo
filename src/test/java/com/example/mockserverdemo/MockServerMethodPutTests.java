@@ -9,20 +9,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.mockserver.model.Header;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.example.mockserverdemo.beans.Org;
 import com.example.mockserverdemo.common.MockServerBase;
-import com.example.mockserverdemo.utils.MockServerUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.http.ContentType;
 
 @SpringBootTest
 @TestInstance(Lifecycle.PER_CLASS)
 class MockServerMethodPutTests extends MockServerBase {
-
-  @Autowired
-  MockServerUtils mockServerUtils;
 
   @BeforeEach
   void beforeEach() {
@@ -42,7 +37,7 @@ class MockServerMethodPutTests extends MockServerBase {
     String body = new ObjectMapper().writeValueAsString(org);
     String bodyUpdated = new ObjectMapper().writeValueAsString(orgUpdated);
 
-    mockServerUtils.client
+    client
         .when(request().withMethod("PUT").withPath("/org/{orgId}")
             .withPathParameter("orgId", "^\\d+$")
             .withHeader(new Header("Content-Type", "application/json")).withBody(body))

@@ -9,19 +9,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.mockserver.model.Header;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.example.mockserverdemo.beans.Org;
 import com.example.mockserverdemo.common.MockServerBase;
-import com.example.mockserverdemo.utils.MockServerUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest
 @TestInstance(Lifecycle.PER_CLASS)
 class MockServerMethodGetTests extends MockServerBase {
-
-  @Autowired
-  MockServerUtils mockServerUtils;
 
   @BeforeEach
   void beforeEach() {
@@ -32,7 +27,7 @@ class MockServerMethodGetTests extends MockServerBase {
   void testGetReturnStringBody() {
     String body = "Hello World!";
 
-    mockServerUtils.client.when(request().withMethod("GET").withPath("/hello"))
+    client.when(request().withMethod("GET").withPath("/hello"))
         .respond(response().withStatusCode(200).withBody(body));
 
     String actualResult = given().log().all()
@@ -52,7 +47,7 @@ class MockServerMethodGetTests extends MockServerBase {
 
     String body = new ObjectMapper().writeValueAsString(org);
 
-    mockServerUtils.client
+    client
         .when(request().withMethod("GET").withPath("/org")
             .withQueryStringParameter("orgName", "solera"))
         .respond(response().withStatusCode(200)

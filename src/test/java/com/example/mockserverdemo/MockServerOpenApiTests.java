@@ -12,21 +12,16 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.mockserver.model.Header;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.example.mockserverdemo.beans.Error;
 import com.example.mockserverdemo.beans.Pet;
 import com.example.mockserverdemo.common.MockServerBase;
-import com.example.mockserverdemo.utils.MockServerUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.http.ContentType;
 
 @SpringBootTest
 @TestInstance(Lifecycle.PER_CLASS)
 class MockServerOpenApiTests extends MockServerBase {
-
-  @Autowired
-  MockServerUtils mockServerUtils;
 
   @BeforeEach
   void beforeEach() {
@@ -60,8 +55,8 @@ class MockServerOpenApiTests extends MockServerBase {
     Error error500 = new Error(500, "Internal Server Error");
     final String errorString500 = new ObjectMapper().writeValueAsString(error500);
 
-    mockServerUtils.client
-        .when(openAPI(mockServerUtils.OPEN_API_URL, "showPetById"))
+    client
+        .when(openAPI(OPEN_API_URL, "showPetById"))
         .respond(
             httpRequest -> {
               if (httpRequest.getPathParameters().getValues("petId").get(0).startsWith("200")) {

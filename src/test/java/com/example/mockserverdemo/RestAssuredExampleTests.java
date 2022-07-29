@@ -12,10 +12,12 @@ import io.restassured.http.ContentType;
 @SpringBootTest
 class RestAssuredExampleTests {
 
+  private final String URL = "https://httpbin.org";
+
   @Test
   void testGet() {
     given().log().all()
-        .when().get("https://httpbin.org/get")
+        .when().get(URL + "/get")
         .then().log().all().assertThat().statusCode(200);
   }
 
@@ -23,7 +25,7 @@ class RestAssuredExampleTests {
   void testGetWithParam() {
     given().log().all()
         .queryParam("orgName", "solera")
-        .when().get("https://httpbin.org/get")
+        .when().get(URL + "/get")
         .then().log().all().assertThat().statusCode(200);
   }
 
@@ -32,7 +34,7 @@ class RestAssuredExampleTests {
     given().log().all()
         .contentType("application/x-www-form-urlencoded; charset=UTF-8")
         .formParam("org", "solera")
-        .when().post("https://httpbin.org/post")
+        .when().post(URL + "/post")
         .then().log().all().assertThat().statusCode(200);
   }
 
@@ -40,7 +42,7 @@ class RestAssuredExampleTests {
   void testPostWithMultiPart() throws FileNotFoundException {
     given().log().all()
         .multiPart(ResourceUtils.getFile(this.getClass().getResource("/test.file")))
-        .when().post("https://httpbin.org/post")
+        .when().post(URL + "/post")
         .then().log().all().assertThat().statusCode(200);
   }
 
@@ -49,7 +51,7 @@ class RestAssuredExampleTests {
     given().log().all()
         .contentType(ContentType.XML)
         .body(ResourceUtils.getFile(this.getClass().getResource("/test.xml")))
-        .when().post("https://httpbin.org/post")
+        .when().post(URL + "/post")
         .then().log().all()
         .assertThat().statusCode(200);
   }
@@ -62,7 +64,7 @@ class RestAssuredExampleTests {
     given().log().all()
         .contentType(ContentType.JSON)
         .body(map)
-        .when().post("https://httpbin.org/post")
+        .when().post(URL + "/post")
         .then().log().all()
         .assertThat()
         .statusCode(200)
@@ -77,7 +79,7 @@ class RestAssuredExampleTests {
     given().log().all()
         .contentType(ContentType.JSON)
         .body(org)
-        .when().post("https://httpbin.org/post")
+        .when().post(URL + "/post")
         .then().log().all()
         .assertThat()
         .statusCode(200)

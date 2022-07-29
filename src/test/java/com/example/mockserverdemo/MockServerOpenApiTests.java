@@ -16,13 +16,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.example.mockserverdemo.beans.Error;
 import com.example.mockserverdemo.beans.Pet;
+import com.example.mockserverdemo.common.MockServerBase;
 import com.example.mockserverdemo.utils.MockServerUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.http.ContentType;
 
 @SpringBootTest
 @TestInstance(Lifecycle.PER_CLASS)
-class MockServerOpenApiTests {
+class MockServerOpenApiTests extends MockServerBase {
 
   @Autowired
   MockServerUtils mockServerUtils;
@@ -44,7 +45,7 @@ class MockServerOpenApiTests {
         .header(new io.restassured.http.Header("X-Request-ID", UUID.randomUUID().toString()))
         .then().log().all()
         .expect().statusCode(statusCode)
-        .when().get("http://localhost:1080/some/path").as(Pet.class);
+        .when().get(URL + "/some/path").as(Pet.class);
     Assertions.assertThat(actualResult).isEqualTo(pet);
   }
 
@@ -87,7 +88,7 @@ class MockServerOpenApiTests {
         .header(new io.restassured.http.Header("X-Request-ID", UUID.randomUUID().toString()))
         .then().log().all()
         .expect().statusCode(200)
-        .when().get("http://localhost:1080/pets/{petId}").as(Pet.class);
+        .when().get(URL + "/pets/{petId}").as(Pet.class);
     Assertions.assertThat(actualResult).isEqualTo(pet);
 
     Error actualResultError400 = given().log().all()
@@ -95,7 +96,7 @@ class MockServerOpenApiTests {
         .header(new io.restassured.http.Header("X-Request-ID", UUID.randomUUID().toString()))
         .then().log().all()
         .expect().statusCode(400)
-        .when().get("http://localhost:1080/pets/{petId}").as(Error.class);
+        .when().get(URL + "/pets/{petId}").as(Error.class);
     Assertions.assertThat(actualResultError400).isEqualTo(error400);
 
     Error actualResultError500 = given().log().all()
@@ -103,7 +104,7 @@ class MockServerOpenApiTests {
         .header(new io.restassured.http.Header("X-Request-ID", UUID.randomUUID().toString()))
         .then().log().all()
         .expect().statusCode(500)
-        .when().get("http://localhost:1080/pets/{petId}").as(Error.class);
+        .when().get(URL + "/pets/{petId}").as(Error.class);
     Assertions.assertThat(actualResultError500).isEqualTo(error500);
   }
 
@@ -118,7 +119,7 @@ class MockServerOpenApiTests {
         .queryParam("limit", "10")
         .then().log().all()
         .expect().statusCode(statusCode)
-        .when().get("http://localhost:1080/pets").jsonPath().getList(".", Pet.class);
+        .when().get(URL + "/pets").jsonPath().getList(".", Pet.class);
 
     Assertions.assertThat(actualResult).isEqualTo(pets);
   }
@@ -134,7 +135,7 @@ class MockServerOpenApiTests {
         .queryParam("limit", "10")
         .then().log().all()
         .expect().statusCode(statusCode)
-        .when().get("http://localhost:1080/pets").as(Error.class);
+        .when().get(URL + "/pets").as(Error.class);
 
     Assertions.assertThat(actualResult).isEqualTo(error);
   }
@@ -151,7 +152,7 @@ class MockServerOpenApiTests {
         .body(pet)
         .then().log().all()
         .expect().statusCode(statusCode)
-        .when().post("http://localhost:1080/pets");
+        .when().post(URL + "/pets");
   }
 
   @Test
@@ -167,7 +168,7 @@ class MockServerOpenApiTests {
         .body(pet)
         .then().log().all()
         .expect().statusCode(statusCode)
-        .when().post("http://localhost:1080/pets").as(Error.class);
+        .when().post(URL + "/pets").as(Error.class);
 
     Assertions.assertThat(actualResult).isEqualTo(error);
   }

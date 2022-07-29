@@ -12,13 +12,14 @@ import org.mockserver.model.Header;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.example.mockserverdemo.beans.Org;
+import com.example.mockserverdemo.common.MockServerBase;
 import com.example.mockserverdemo.utils.MockServerUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.http.ContentType;
 
 @SpringBootTest
 @TestInstance(Lifecycle.PER_CLASS)
-class MockServerMethodPutTests {
+class MockServerMethodPutTests extends MockServerBase {
 
   @Autowired
   MockServerUtils mockServerUtils;
@@ -53,7 +54,7 @@ class MockServerMethodPutTests {
         .pathParam("orgId", org.getId())
         .body(org)
         .then().log().all().statusCode(200)
-        .when().put("http://localhost:1080/org/{orgId}").as(Org.class);
+        .when().put(URL + "/org/{orgId}").as(Org.class);
 
     Assertions.assertThat(actualResult.getId()).isEqualTo(orgUpdated.getId());
     Assertions.assertThat(actualResult.getOrgName()).isEqualTo(orgUpdated.getOrgName());

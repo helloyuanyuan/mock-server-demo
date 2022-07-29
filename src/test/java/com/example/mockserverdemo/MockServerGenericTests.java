@@ -18,12 +18,13 @@ import org.mockserver.model.Header;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.example.mockserverdemo.beans.Org;
+import com.example.mockserverdemo.common.MockServerBase;
 import com.example.mockserverdemo.utils.MockServerUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest
 @TestInstance(Lifecycle.PER_CLASS)
-class MockServerGenericTests {
+class MockServerGenericTests extends MockServerBase {
 
   @Autowired
   MockServerUtils mockServerUtils;
@@ -41,7 +42,7 @@ class MockServerGenericTests {
 
     String actualResult = given().log().all()
         .then().log().all().statusCode(200)
-        .when().get("http://localhost:1080/some/path").asString();
+        .when().get(URL + "/some/path").asString();
 
     Assertions.assertThat(actualResult).isEqualTo("some_response_body");
   }
@@ -56,13 +57,13 @@ class MockServerGenericTests {
     String actualResult = given().log().all()
         .pathParam("cartId", "A123")
         .then().log().all().statusCode(200)
-        .when().get("http://localhost:1080/some/path/{cartId}").asString();
+        .when().get(URL + "/some/path/{cartId}").asString();
 
     Assertions.assertThat(actualResult).isEqualTo("some_response_body");
 
     actualResult = given().log().all()
         .then().log().all().statusCode(200)
-        .when().get("http://localhost:1080/some/path/{cartId}", "B223").asString();
+        .when().get(URL + "/some/path/{cartId}", "B223").asString();
 
     Assertions.assertThat(actualResult).isEqualTo("some_response_body");
   }
@@ -85,7 +86,7 @@ class MockServerGenericTests {
     Org actualResult = given().log().all()
         .queryParam("orgName", orgName)
         .then().log().all().statusCode(200)
-        .when().get("http://localhost:1080/org").as(Org.class);
+        .when().get(URL + "/org").as(Org.class);
 
     Assertions.assertThat(actualResult.getOrgName()).isEqualTo(orgName);
   }
@@ -102,7 +103,7 @@ class MockServerGenericTests {
         .header(new io.restassured.http.Header("Accept", "application/json"))
         .header(new io.restassured.http.Header("Accept-Encoding", "gzip, deflate, br"))
         .then().log().all().statusCode(200)
-        .when().get("http://localhost:1080/some/path").asString();
+        .when().get(URL + "/some/path").asString();
 
     Assertions.assertThat(actualResult).isEqualTo("some_response_body");
   }
@@ -120,7 +121,7 @@ class MockServerGenericTests {
         .cookies("sessionA", "4930456C-C718-476F-971F-CB8E047AB348",
             "sessionB", "4930456C-C718-476F-971F-CB8E047AB349")
         .then().log().all().statusCode(200)
-        .when().get("http://localhost:1080/some/path").asString();
+        .when().get(URL + "/some/path").asString();
 
     Assertions.assertThat(actualResult).isEqualTo("some_response_body");
   }
@@ -137,7 +138,7 @@ class MockServerGenericTests {
 
     String actualResult = given().log().all()
         .then().log().all().statusCode(200)
-        .when().get("http://localhost:1080/hello").asString();
+        .when().get(URL + "/hello").asString();
 
     Assertions.assertThat(actualResult).isEqualTo("AAA");
 
@@ -147,7 +148,7 @@ class MockServerGenericTests {
 
     actualResult = given().log().all()
         .then().log().all().statusCode(200)
-        .when().get("http://localhost:1080/hello").asString();
+        .when().get(URL + "/hello").asString();
 
     Assertions.assertThat(actualResult).isEqualTo("BBB");
   }
@@ -165,7 +166,7 @@ class MockServerGenericTests {
 
     String actualResult = given().log().all()
         .then().log().all().statusCode(200)
-        .when().get("http://localhost:1080/hello").asString();
+        .when().get(URL + "/hello").asString();
 
     Assertions.assertThat(actualResult).isEqualTo("AAA");
   }
@@ -185,7 +186,7 @@ class MockServerGenericTests {
 
     String body = given().log().all()
         .then().log().all().statusCode(200)
-        .when().get("http://localhost:1080/hello").asString();
+        .when().get(URL + "/hello").asString();
 
     Assertions.assertThat(body).isEqualTo("BBB");
   }
@@ -205,19 +206,19 @@ class MockServerGenericTests {
 
     String actualResult = given().log().all()
         .then().log().all().statusCode(200)
-        .when().get("http://localhost:1080/hello").asString();
+        .when().get(URL + "/hello").asString();
 
     Assertions.assertThat(actualResult).isEqualTo("AAA");
 
     actualResult = given().log().all()
         .then().log().all().statusCode(200)
-        .when().get("http://localhost:1080/hello").asString();
+        .when().get(URL + "/hello").asString();
 
     Assertions.assertThat(actualResult).isEqualTo("BBB");
 
     actualResult = given().log().all()
         .then().log().all().statusCode(404)
-        .when().get("http://localhost:1080/hello").statusLine();
+        .when().get(URL + "/hello").statusLine();
     Assertions.assertThat(actualResult).contains("Not Found");
   }
 

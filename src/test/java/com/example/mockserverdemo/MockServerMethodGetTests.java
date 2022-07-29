@@ -12,12 +12,13 @@ import org.mockserver.model.Header;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.example.mockserverdemo.beans.Org;
+import com.example.mockserverdemo.common.MockServerBase;
 import com.example.mockserverdemo.utils.MockServerUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest
 @TestInstance(Lifecycle.PER_CLASS)
-class MockServerMethodGetTests {
+class MockServerMethodGetTests extends MockServerBase {
 
   @Autowired
   MockServerUtils mockServerUtils;
@@ -36,7 +37,7 @@ class MockServerMethodGetTests {
 
     String actualResult = given().log().all()
         .then().log().all().statusCode(200)
-        .when().get("http://localhost:1080/hello").asString();
+        .when().get(URL + "/hello").asString();
 
     Assertions.assertThat(actualResult).isEqualTo(body);
 
@@ -60,7 +61,7 @@ class MockServerMethodGetTests {
     Org actualResult = given().log().all()
         .queryParam("orgName", "solera")
         .then().log().all().statusCode(200)
-        .when().get("http://localhost:1080/org").as(Org.class);
+        .when().get(URL + "/org").as(Org.class);
 
     Assertions.assertThat(actualResult.getId()).isEqualTo(org.getId());
     Assertions.assertThat(actualResult.getOrgName()).isEqualTo(org.getOrgName());

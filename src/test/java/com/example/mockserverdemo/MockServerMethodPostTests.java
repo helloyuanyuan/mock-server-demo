@@ -12,13 +12,14 @@ import org.mockserver.model.Header;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.example.mockserverdemo.beans.Org;
+import com.example.mockserverdemo.common.MockServerBase;
 import com.example.mockserverdemo.utils.MockServerUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.http.ContentType;
 
 @SpringBootTest
 @TestInstance(Lifecycle.PER_CLASS)
-class MockServerMethodPostTests {
+class MockServerMethodPostTests extends MockServerBase {
 
   @Autowired
   MockServerUtils mockServerUtils;
@@ -46,7 +47,7 @@ class MockServerMethodPostTests {
         .contentType(ContentType.JSON)
         .body(org)
         .then().log().all().statusCode(200)
-        .when().post("http://localhost:1080/org/create").as(Org.class);
+        .when().post(URL + "/org/create").as(Org.class);
 
     Assertions.assertThat(actualResult.getId()).isEqualTo(org.getId());
     Assertions.assertThat(actualResult.getOrgName()).isEqualTo(org.getOrgName());

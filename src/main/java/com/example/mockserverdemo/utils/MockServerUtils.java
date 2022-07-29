@@ -5,22 +5,15 @@ import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
 import static org.mockserver.model.OpenAPIDefinition.openAPI;
 import java.util.Map;
-import org.mockserver.client.MockServerClient;
 import org.mockserver.model.ClearType;
 import org.mockserver.model.Header;
 import org.mockserver.verify.VerificationTimes;
 import org.springframework.stereotype.Component;
+import com.example.mockserverdemo.common.MockServerBase;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component
-public class MockServerUtils {
-
-  public final String HOST = PropertyUtils.getInstance().getProperty("host");
-  public final int PORT = Integer.parseInt(PropertyUtils.getInstance().getProperty("port"));
-  public final String OPEN_API_URL =
-      PropertyUtils.getInstance().getProperty("open_api_url");
-
-  public final MockServerClient client = new MockServerClient(HOST, PORT);
+public class MockServerUtils extends MockServerBase {
 
   public void createOpenApiExpectation() {
     client

@@ -1,4 +1,4 @@
-package com.example.mockserverdemo;
+package com.solera.global.qa.mockservertest;
 
 import static io.restassured.RestAssured.given;
 import static org.mockserver.model.HttpResponse.response;
@@ -13,10 +13,10 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.mockserver.model.Header;
 import org.springframework.boot.test.context.SpringBootTest;
-import com.example.mockserverdemo.beans.Error;
-import com.example.mockserverdemo.beans.Pet;
-import com.example.mockserverdemo.common.MockServerBase;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.solera.global.qa.mockservertest.beans.Error;
+import com.solera.global.qa.mockservertest.beans.Pet;
+import com.solera.global.qa.mockservertest.common.MockServerBase;
 import io.restassured.http.ContentType;
 
 @SpringBootTest

@@ -1,4 +1,4 @@
-package com.example.mockserverdemo.utils;
+package com.solera.global.qa.mockservertest.utils;
 
 import static org.mockserver.mock.OpenAPIExpectation.openAPIExpectation;
 import static org.mockserver.model.HttpRequest.request;
@@ -9,8 +9,8 @@ import org.mockserver.model.ClearType;
 import org.mockserver.model.Header;
 import org.mockserver.verify.VerificationTimes;
 import org.springframework.stereotype.Component;
-import com.example.mockserverdemo.common.MockServerBase;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.solera.global.qa.mockservertest.common.MockServerBase;
 
 @Component
 public class MockServerUtils extends MockServerBase {

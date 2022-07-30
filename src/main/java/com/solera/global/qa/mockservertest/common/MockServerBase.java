@@ -1,10 +1,10 @@
-package com.example.mockserverdemo.common;
+package com.solera.global.qa.mockservertest.common;
 
 import org.mockserver.client.MockServerClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import com.example.mockserverdemo.utils.MockServerUtils;
-import com.example.mockserverdemo.utils.PropertyUtils;
+import com.solera.global.qa.mockservertest.utils.MockServerUtils;
+import com.solera.global.qa.mockservertest.utils.PropertyUtils;
 
 public class MockServerBase {
 

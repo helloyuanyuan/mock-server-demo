@@ -1,4 +1,4 @@
-package com.example.mockserverdemo;
+package com.solera.global.qa.mockservertest;
 
 import static io.restassured.RestAssured.given;
 import java.io.FileNotFoundException;
@@ -6,7 +6,7 @@ import java.util.HashMap;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.ResourceUtils;
-import com.example.mockserverdemo.beans.Org;
+import com.solera.global.qa.mockservertest.beans.Org;
 import io.restassured.http.ContentType;
 
 @SpringBootTest

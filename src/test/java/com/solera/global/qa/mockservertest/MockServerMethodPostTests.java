@@ -1,4 +1,4 @@
-package com.example.mockserverdemo;
+package com.solera.global.qa.mockservertest;
 
 import static io.restassured.RestAssured.given;
 import static org.mockserver.model.HttpRequest.request;
@@ -10,14 +10,14 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.mockserver.model.Header;
 import org.springframework.boot.test.context.SpringBootTest;
-import com.example.mockserverdemo.beans.Org;
-import com.example.mockserverdemo.common.MockServerBase;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.solera.global.qa.mockservertest.beans.Org;
+import com.solera.global.qa.mockservertest.common.MockServerBase;
 import io.restassured.http.ContentType;
 
 @SpringBootTest
 @TestInstance(Lifecycle.PER_CLASS)
-class MockServerMethodPutTests extends MockServerBase {
+class MockServerMethodPostTests extends MockServerBase {
 
   @BeforeEach
   void beforeEach() {
@@ -25,34 +25,29 @@ class MockServerMethodPutTests extends MockServerBase {
   }
 
   @Test
-  void testPutWithJsonBodyReturnJsonBodyToClass() throws Exception {
+  void testPostWithJsonBodyReturnJsonBodyToClass() throws Exception {
     Org org = new Org();
     org.setId("1");
     org.setOrgName("solera");
 
-    Org orgUpdated = new Org();
-    orgUpdated.setId("1");
-    orgUpdated.setOrgName("soleraUpdated");
-
     String body = new ObjectMapper().writeValueAsString(org);
-    String bodyUpdated = new ObjectMapper().writeValueAsString(orgUpdated);
 
     client
-        .when(request().withMethod("PUT").withPath("/org/{orgId}")
-            .withPathParameter("orgId", "^\\d+$")
+        .when(request().withMethod("POST").withPath("/org/create")
             .withHeader(new Header("Content-Type", "application/json")).withBody(body))
         .respond(response().withStatusCode(200)
-            .withHeader(new Header("Content-Type", "application/json")).withBody(bodyUpdated));
+            .withHeader(new Header("Content-Type", "application/json")).withBody(body));
 
     Org actualResult = given().log().all()
         .contentType(ContentType.JSON)
-        .pathParam("orgId", org.getId())
         .body(org)
         .then().log().all().statusCode(200)
-        .when().put(URL + "/org/{orgId}").as(Org.class);
+        .when().post(URL + "/org/create").as(Org.class);
 
-    Assertions.assertThat(actualResult.getId()).isEqualTo(orgUpdated.getId());
-    Assertions.assertThat(actualResult.getOrgName()).isEqualTo(orgUpdated.getOrgName());
+    Assertions.assertThat(actualResult.getId()).isEqualTo(org.getId());
+    Assertions.assertThat(actualResult.getOrgName()).isEqualTo(org.getOrgName());
+
+    mockServerUtils.verify("/org/create", "POST");
   }
 
 }

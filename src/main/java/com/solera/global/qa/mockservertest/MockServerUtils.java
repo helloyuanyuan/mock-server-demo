@@ -1,4 +1,4 @@
-package com.solera.global.qa.mockservertest.utils;
+package com.solera.global.qa.mockservertest;
 
 import static org.mockserver.mock.OpenAPIExpectation.openAPIExpectation;
 import static org.mockserver.model.HttpRequest.request;
@@ -10,27 +10,26 @@ import org.mockserver.model.Header;
 import org.mockserver.verify.VerificationTimes;
 import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.solera.global.qa.mockservertest.MockServerTestBase;
 
 @Component
 public class MockServerUtils extends MockServerTestBase {
 
   public void createOpenApiExpectation() {
     client
-        .upsert(openAPIExpectation(OPEN_API_URL));
+        .upsert(openAPIExpectation(OPENAPIURL));
   }
 
   public void createOpenApiExpectation(Map<String, String> operationsAndResponses) {
     client
         .upsert(
-            openAPIExpectation(OPEN_API_URL, operationsAndResponses));
+            openAPIExpectation(OPENAPIURL, operationsAndResponses));
   }
 
   public void createOpenApiExpectation(String operationId, Integer statusCode, Object body)
       throws Exception {
     String bodyString = new ObjectMapper().writeValueAsString(body);
     client
-        .when(openAPI(OPEN_API_URL, operationId))
+        .when(openAPI(OPENAPIURL, operationId))
         .respond(response().withStatusCode(statusCode)
             .withHeader(new Header("Content-Type", "application/json"))
             .withBody(bodyString));

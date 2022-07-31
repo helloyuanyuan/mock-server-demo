@@ -17,8 +17,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.solera.global.qa.mockservertest.MockServerTestBase;
 import com.solera.global.qa.mockservertest.beans.Error;
 import com.solera.global.qa.mockservertest.beans.Pet;
-import com.solera.global.qa.mockservertest.utils.junit.extension.TimingExtension;
-import com.solera.global.qa.mockservertest.utils.junit.logger.LifecycleLogger;
+import com.solera.global.qa.mockservertest.common.junitExtension.TimingExtension;
+import com.solera.global.qa.mockservertest.common.junitLogger.LifecycleLogger;
 import io.restassured.http.ContentType;
 
 @SpringBootTest
@@ -44,7 +44,7 @@ class MockServerOpenApiTests extends MockServerTestBase implements LifecycleLogg
             UUID.randomUUID().toString()))
         .then().log().all()
         .expect().statusCode(statusCode)
-        .when().get(URL + "/some/path").as(Pet.class);
+        .when().get(MOCKSERVERURL + "/some/path").as(Pet.class);
     Assertions.assertThat(actualResult).isEqualTo(pet);
   }
 
@@ -60,7 +60,7 @@ class MockServerOpenApiTests extends MockServerTestBase implements LifecycleLogg
     final String errorString500 = new ObjectMapper().writeValueAsString(error500);
 
     client
-        .when(openAPI(OPEN_API_URL, "showPetById"))
+        .when(openAPI(OPENAPIURL, "showPetById"))
         .respond(
             httpRequest -> {
               if (httpRequest.getPathParameters().getValues("petId").get(0)
@@ -90,7 +90,7 @@ class MockServerOpenApiTests extends MockServerTestBase implements LifecycleLogg
             UUID.randomUUID().toString()))
         .then().log().all()
         .expect().statusCode(200)
-        .when().get(URL + "/pets/{petId}").as(Pet.class);
+        .when().get(MOCKSERVERURL + "/pets/{petId}").as(Pet.class);
     Assertions.assertThat(actualResult).isEqualTo(pet);
 
     Error actualResultError400 = given().log().all()
@@ -99,7 +99,7 @@ class MockServerOpenApiTests extends MockServerTestBase implements LifecycleLogg
             UUID.randomUUID().toString()))
         .then().log().all()
         .expect().statusCode(400)
-        .when().get(URL + "/pets/{petId}").as(Error.class);
+        .when().get(MOCKSERVERURL + "/pets/{petId}").as(Error.class);
     Assertions.assertThat(actualResultError400).isEqualTo(error400);
 
     Error actualResultError500 = given().log().all()
@@ -108,7 +108,7 @@ class MockServerOpenApiTests extends MockServerTestBase implements LifecycleLogg
             UUID.randomUUID().toString()))
         .then().log().all()
         .expect().statusCode(500)
-        .when().get(URL + "/pets/{petId}").as(Error.class);
+        .when().get(MOCKSERVERURL + "/pets/{petId}").as(Error.class);
     Assertions.assertThat(actualResultError500).isEqualTo(error500);
   }
 
@@ -123,7 +123,7 @@ class MockServerOpenApiTests extends MockServerTestBase implements LifecycleLogg
         .queryParam("limit", "10")
         .then().log().all()
         .expect().statusCode(statusCode)
-        .when().get(URL + "/pets").jsonPath().getList(".", Pet.class);
+        .when().get(MOCKSERVERURL + "/pets").jsonPath().getList(".", Pet.class);
 
     Assertions.assertThat(actualResult).isEqualTo(pets);
   }
@@ -139,7 +139,7 @@ class MockServerOpenApiTests extends MockServerTestBase implements LifecycleLogg
         .queryParam("limit", "10")
         .then().log().all()
         .expect().statusCode(statusCode)
-        .when().get(URL + "/pets").as(Error.class);
+        .when().get(MOCKSERVERURL + "/pets").as(Error.class);
 
     Assertions.assertThat(actualResult).isEqualTo(error);
   }
@@ -156,7 +156,7 @@ class MockServerOpenApiTests extends MockServerTestBase implements LifecycleLogg
         .body(pet)
         .then().log().all()
         .expect().statusCode(statusCode)
-        .when().post(URL + "/pets");
+        .when().post(MOCKSERVERURL + "/pets");
   }
 
   @Test
@@ -172,7 +172,7 @@ class MockServerOpenApiTests extends MockServerTestBase implements LifecycleLogg
         .body(pet)
         .then().log().all()
         .expect().statusCode(statusCode)
-        .when().post(URL + "/pets").as(Error.class);
+        .when().post(MOCKSERVERURL + "/pets").as(Error.class);
 
     Assertions.assertThat(actualResult).isEqualTo(error);
   }

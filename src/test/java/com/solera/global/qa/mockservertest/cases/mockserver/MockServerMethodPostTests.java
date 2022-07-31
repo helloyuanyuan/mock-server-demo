@@ -13,8 +13,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.solera.global.qa.mockservertest.MockServerTestBase;
 import com.solera.global.qa.mockservertest.beans.Org;
-import com.solera.global.qa.mockservertest.utils.junit.extension.TimingExtension;
-import com.solera.global.qa.mockservertest.utils.junit.logger.LifecycleLogger;
+import com.solera.global.qa.mockservertest.common.junitExtension.TimingExtension;
+import com.solera.global.qa.mockservertest.common.junitLogger.LifecycleLogger;
 import io.restassured.http.ContentType;
 
 @SpringBootTest
@@ -45,7 +45,7 @@ class MockServerMethodPostTests extends MockServerTestBase implements LifecycleL
         .contentType(ContentType.JSON)
         .body(org)
         .then().log().all().statusCode(200)
-        .when().post(URL + "/org/create").as(Org.class);
+        .when().post(MOCKSERVERURL + "/org/create").as(Org.class);
 
     Assertions.assertThat(actualResult.getId()).isEqualTo(org.getId());
     Assertions.assertThat(actualResult.getOrgName()).isEqualTo(org.getOrgName());

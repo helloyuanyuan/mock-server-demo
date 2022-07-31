@@ -14,8 +14,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.solera.global.qa.mockservertest.MockServerTestBase;
 import com.solera.global.qa.mockservertest.beans.Org;
-import com.solera.global.qa.mockservertest.utils.junit.extension.TimingExtension;
-import com.solera.global.qa.mockservertest.utils.junit.logger.LifecycleLogger;
+import com.solera.global.qa.mockservertest.common.junitExtension.TimingExtension;
+import com.solera.global.qa.mockservertest.common.junitLogger.LifecycleLogger;
 
 @SpringBootTest
 @DisplayName("MockServerMethodGetTests")
@@ -39,7 +39,7 @@ class MockServerMethodGetTests extends MockServerTestBase implements LifecycleLo
 
     String actualResult = given().log().all()
         .then().log().all().statusCode(200)
-        .when().get(URL + "/hello").asString();
+        .when().get(MOCKSERVERURL + "/hello").asString();
 
     Assertions.assertThat(actualResult).isEqualTo(body);
 
@@ -63,7 +63,7 @@ class MockServerMethodGetTests extends MockServerTestBase implements LifecycleLo
     Org actualResult = given().log().all()
         .queryParam("orgName", "solera")
         .then().log().all().statusCode(200)
-        .when().get(URL + "/org").as(Org.class);
+        .when().get(MOCKSERVERURL + "/org").as(Org.class);
 
     Assertions.assertThat(actualResult.getId()).isEqualTo(org.getId());
     Assertions.assertThat(actualResult.getOrgName()).isEqualTo(org.getOrgName());

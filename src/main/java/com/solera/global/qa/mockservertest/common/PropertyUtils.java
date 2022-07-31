@@ -1,4 +1,4 @@
-package com.solera.global.qa.mockservertest.utils;
+package com.solera.global.qa.mockservertest.common;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -50,6 +50,10 @@ public class PropertyUtils {
 
   public String getProperty(String key) {
     return properties.getProperty(key);
+  }
+
+  public String getUrl(String host, int port) {
+    return "http://" + host + ":" + port;
   }
 
 }

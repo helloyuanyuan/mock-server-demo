@@ -7,16 +7,20 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockserver.model.Header;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.solera.global.qa.mockservertest.MockServerTestBase;
 import com.solera.global.qa.mockservertest.beans.Org;
+import com.solera.global.qa.mockservertest.utils.junit.extension.TimingExtension;
+import com.solera.global.qa.mockservertest.utils.junit.logger.LifecycleLogger;
 import io.restassured.http.ContentType;
 
 @SpringBootTest
 @DisplayName("MockServerMethodPutTests")
-class MockServerMethodPutTests extends MockServerTestBase {
+@ExtendWith(TimingExtension.class)
+class MockServerMethodPutTests extends MockServerTestBase implements LifecycleLogger {
 
   @BeforeEach
   void beforeEach() {

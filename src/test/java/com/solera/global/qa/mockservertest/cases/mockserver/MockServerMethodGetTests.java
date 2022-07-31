@@ -4,18 +4,26 @@ import static io.restassured.RestAssured.given;
 import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockserver.model.Header;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.solera.global.qa.mockservertest.MockServerTestBase;
 import com.solera.global.qa.mockservertest.beans.Org;
+import com.solera.global.qa.mockservertest.utils.junit.extension.TimingExtension;
+import com.solera.global.qa.mockservertest.utils.junit.logger.LifecycleLogger;
 
 @SpringBootTest
 @DisplayName("MockServerMethodGetTests")
-class MockServerMethodGetTests extends MockServerTestBase {
+@ExtendWith(TimingExtension.class)
+class MockServerMethodGetTests extends MockServerTestBase implements LifecycleLogger {
+
+  @BeforeAll
+  void beforeAll() {}
 
   @BeforeEach
   void beforeEach() {

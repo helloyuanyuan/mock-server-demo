@@ -31,3 +31,13 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Default ignored files
+reports
+target
+logs
+**/.DS_Store
+**/*.iml
+**/.allure
+allure-results
+allure-reports

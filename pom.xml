@@ -9,7 +9,7 @@
   </parent>
   <groupId>com.solera.global.qa.mockservertest</groupId>
   <artifactId>mockservertest</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>1.0.0-SNAPSHOT</version>
   <name>mockservertest</name>
   <description>Mock Server Test Project</description>
   <properties>
@@ -20,6 +20,12 @@
     <log4j.version>2.17.2</log4j.version>
     <jackson.version>2.13.3</jackson.version>
     <restassured.version>4.5.1</restassured.version>
+    <junit-platform-suite-engine.version>1.8.2</junit-platform-suite-engine.version>
+    <aspectj.version>1.8.10</aspectj.version>
+    <allure-junit5.version>2.13.2</allure-junit5.version>
+    <allure-maven.version>2.11.2</allure-maven.version>
+    <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
+    <junit-platform-surefire-provider.version>1.2.0</junit-platform-surefire-provider.version>
   </properties>
   <dependencies>
     <dependency>
@@ -51,6 +57,11 @@
       <artifactId>log4j-api</artifactId>
       <version>${log4j.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.junit.platform</groupId>
+      <artifactId>junit-platform-suite-engine</artifactId>
+      <version>${junit-platform-suite-engine.version}</version>
+    </dependency>
 
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -61,6 +72,12 @@
       <groupId>io.rest-assured</groupId>
       <artifactId>rest-assured</artifactId>
       <version>${restassured.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.qameta.allure</groupId>
+      <artifactId>allure-junit5</artifactId>
+      <version>${allure-junit5.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -77,6 +94,38 @@
             </exclude>
           </excludes>
         </configuration>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${maven-surefire-plugin.version}</version>
+        <configuration>
+          <testFailureIgnore>false</testFailureIgnore>
+          <argLine>-javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"</argLine>
+          <systemProperties>
+            <property>
+              <name>junit.jupiter.extensions.autodetection.enabled</name>
+              <value>true</value>
+            </property>
+          </systemProperties>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-surefire-provider</artifactId>
+            <version>${junit-platform-surefire-provider.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>${aspectj.version}</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+      <plugin>
+        <groupId>io.qameta.allure</groupId>
+        <artifactId>allure-maven</artifactId>
+        <version>${allure-maven.version}</version>
       </plugin>
     </plugins>
   </build>

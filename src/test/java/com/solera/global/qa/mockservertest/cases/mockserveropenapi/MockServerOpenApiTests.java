@@ -1,13 +1,14 @@
 package com.solera.global.qa.mockservertest.cases.mockserveropenapi;
 
 import static io.restassured.RestAssured.given;
+import static org.mockserver.model.HttpResponse.notFoundResponse;
 import static org.mockserver.model.HttpResponse.response;
 import static org.mockserver.model.OpenAPIDefinition.openAPI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,38 +27,33 @@ import io.restassured.http.ContentType;
 @ExtendWith(TimingExtension.class)
 class MockServerOpenApiTests extends MockServerTestBase implements LifecycleLogger {
 
-  @BeforeEach
-  void beforeEach() {
+  Pet pet = new Pet(1, "Cat", "CAT");
+  Error e400 = new Error(400, "Bad Request");
+  Error e500 = new Error(500, "Internal Server Error");
+
+  @BeforeAll
+  void beforeEach() throws Exception {
     mockServerUtils.reset();
-  }
 
-  @Test
-  void testSomePath() throws Exception {
-    int statusCode = 200;
-    Pet pet = new Pet(1, "Cat", "CAT");
+    String petString = new ObjectMapper().writeValueAsString(pet);
+    String petsString = new ObjectMapper().writeValueAsString(Arrays.asList(pet));
+    String eString400 = new ObjectMapper().writeValueAsString(e400);
+    String eString500 = new ObjectMapper().writeValueAsString(e500);
 
-    mockServerUtils.createOpenApiExpectation("somePath", statusCode, pet);
-
-    Pet actualResult = given().log().all()
-        .queryParam("limit", "10")
-        .header(new io.restassured.http.Header("X-Request-ID",
-            UUID.randomUUID().toString()))
-        .then().log().all()
-        .expect().statusCode(statusCode)
-        .when().get(MOCKSERVERURL + "/some/path").as(Pet.class);
-    Assertions.assertThat(actualResult).isEqualTo(pet);
-  }
-
-  @Test
-  void testShowPetById() throws Exception {
-    Pet pet = new Pet(1, "Cat", "CAT");
-    final String petString = new ObjectMapper().writeValueAsString(pet);
-
-    Error error400 = new Error(400, "Bad Request");
-    final String errorString400 = new ObjectMapper().writeValueAsString(error400);
-
-    Error error500 = new Error(500, "Internal Server Error");
-    final String errorString500 = new ObjectMapper().writeValueAsString(error500);
+    client
+        .when(openAPI(OPENAPIURL, "somePath"))
+        .respond(
+            httpRequest -> {
+              if (httpRequest.getQueryStringParameters().getValues("limit").get(0)
+                  .startsWith("200")) {
+                return response()
+                    .withStatusCode(200)
+                    .withHeaders(new Header("Content-Type", "application/json"))
+                    .withBody(petString);
+              } else {
+                return notFoundResponse();
+              }
+            });
 
     client
         .when(openAPI(OPENAPIURL, "showPetById"))
@@ -75,106 +71,132 @@ class MockServerOpenApiTests extends MockServerTestBase implements LifecycleLogg
                 return response()
                     .withStatusCode(400)
                     .withHeaders(new Header("Content-Type", "application/json"))
-                    .withBody(errorString400);
-              } else {
+                    .withBody(eString400);
+              }
+              if (httpRequest.getPathParameters().getValues("petId").get(0)
+                  .startsWith("500")) {
                 return response()
                     .withStatusCode(500)
                     .withHeaders(new Header("Content-Type", "application/json"))
-                    .withBody(errorString500);
+                    .withBody(eString500);
+              } else {
+                return notFoundResponse();
               }
             });
 
+    client
+        .when(openAPI(OPENAPIURL, "listPets"))
+        .respond(
+            httpRequest -> {
+              if (httpRequest.getQueryStringParameters().getValues("limit").get(0)
+                  .startsWith("200")) {
+                return response()
+                    .withStatusCode(200)
+                    .withHeaders(new Header("Content-Type", "application/json"))
+                    .withBody(petsString);
+              }
+              if (httpRequest.getQueryStringParameters().getValues("limit").get(0)
+                  .startsWith("500")) {
+                return response()
+                    .withStatusCode(500)
+                    .withHeaders(new Header("Content-Type", "application/json"))
+                    .withBody(eString500);
+              } else {
+                return notFoundResponse();
+              }
+            });
+
+    client
+        .when(openAPI(OPENAPIURL, "createPets"))
+        .respond(
+            httpRequest -> {
+              if (httpRequest.getBodyAsString().contains("201")) {
+                return response()
+                    .withStatusCode(201)
+                    .withHeaders(new Header("Content-Type", "application/json"));
+              }
+              if (httpRequest.getBody().toString().contains("500")) {
+                return response()
+                    .withStatusCode(500)
+                    .withHeaders(new Header("Content-Type", "application/json"))
+                    .withBody(eString500);
+              } else {
+                return notFoundResponse();
+              }
+            });
+
+  }
+
+  @Test
+  void testSomePath() throws Exception {
     Pet actualResult = given().log().all()
-        .pathParam("petId", "200123")
+        .queryParam("limit", "200")
         .header(new io.restassured.http.Header("X-Request-ID",
             UUID.randomUUID().toString()))
         .then().log().all()
         .expect().statusCode(200)
-        .when().get(MOCKSERVERURL + "/pets/{petId}").as(Pet.class);
+        .when().get(MOCKSERVERURL + "/some/path").as(Pet.class);
     Assertions.assertThat(actualResult).isEqualTo(pet);
+  }
 
-    Error actualResultError400 = given().log().all()
-        .pathParam("petId", "400123")
+  @Test
+  void testShowPetById() throws Exception {
+    testShowPetById("200123", 200, pet);
+    testShowPetById("400123", 400, e400);
+    testShowPetById("500123", 500, e500);
+  }
+
+  void testShowPetById(String value, int statusCode, Object object) {
+    Object actualResult = given().log().all()
+        .pathParam("petId", value)
         .header(new io.restassured.http.Header("X-Request-ID",
             UUID.randomUUID().toString()))
         .then().log().all()
-        .expect().statusCode(400)
-        .when().get(MOCKSERVERURL + "/pets/{petId}").as(Error.class);
-    Assertions.assertThat(actualResultError400).isEqualTo(error400);
+        .expect().statusCode(statusCode)
+        .when().get(MOCKSERVERURL + "/pets/{petId}").as(object.getClass());
+    Assertions.assertThat(actualResult).isEqualTo(object);
 
-    Error actualResultError500 = given().log().all()
-        .pathParam("petId", "123")
-        .header(new io.restassured.http.Header("X-Request-ID",
-            UUID.randomUUID().toString()))
-        .then().log().all()
-        .expect().statusCode(500)
-        .when().get(MOCKSERVERURL + "/pets/{petId}").as(Error.class);
-    Assertions.assertThat(actualResultError500).isEqualTo(error500);
   }
 
   @Test
   void testlistPetsStatusCode200() throws Exception {
-    int statusCode = 200;
-    List<Pet> pets = Arrays.asList(new Pet(1, "Cat", "CAT"));
-
-    mockServerUtils.createOpenApiExpectation("listPets", statusCode, pets);
-
     List<Pet> actualResult = given().log().all()
-        .queryParam("limit", "10")
+        .queryParam("limit", "200")
         .then().log().all()
-        .expect().statusCode(statusCode)
+        .expect().statusCode(200)
         .when().get(MOCKSERVERURL + "/pets").jsonPath().getList(".", Pet.class);
-
-    Assertions.assertThat(actualResult).isEqualTo(pets);
+    Assertions.assertThat(actualResult).isEqualTo(Arrays.asList(pet));
   }
 
   @Test
   void testlistPetsStatusCode500() throws Exception {
-    int statusCode = 500;
-    Error error = new Error(statusCode, "Internal Server Error");
-
-    mockServerUtils.createOpenApiExpectation("listPets", statusCode, error);
-
     Error actualResult = given().log().all()
-        .queryParam("limit", "10")
+        .queryParam("limit", "500")
         .then().log().all()
-        .expect().statusCode(statusCode)
+        .expect().statusCode(500)
         .when().get(MOCKSERVERURL + "/pets").as(Error.class);
-
-    Assertions.assertThat(actualResult).isEqualTo(error);
+    Assertions.assertThat(actualResult).isEqualTo(e500);
   }
 
   @Test
   void testCreatePetsStatusCode201() throws Exception {
-    int statusCode = 201;
-    Pet pet = new Pet(1, "Cat", "CAT");
-
-    mockServerUtils.createOpenApiExpectation("createPets", statusCode, null);
-
     given().log().all()
         .contentType(ContentType.JSON)
-        .body(pet)
+        .body(new Pet(201, "Cat", "CAT"))
         .then().log().all()
-        .expect().statusCode(statusCode)
+        .expect().statusCode(201)
         .when().post(MOCKSERVERURL + "/pets");
   }
 
   @Test
   void testCreatePetsStatusCode500() throws Exception {
-    int statusCode = 500;
-    Pet pet = new Pet(1, "Cat", "CAT");
-    Error error = new Error(statusCode, "Internal Server Error");
-
-    mockServerUtils.createOpenApiExpectation("createPets", statusCode, error);
-
     Error actualResult = given().log().all()
         .contentType(ContentType.JSON)
-        .body(pet)
+        .body(new Pet(500, "Dog", "DOG"))
         .then().log().all()
-        .expect().statusCode(statusCode)
+        .expect().statusCode(500)
         .when().post(MOCKSERVERURL + "/pets").as(Error.class);
-
-    Assertions.assertThat(actualResult).isEqualTo(error);
+    Assertions.assertThat(actualResult).isEqualTo(e500);
   }
 
 }

@@ -1,12 +1,12 @@
-package com.solera.global.qa.mockservertest.common;
+package com.solera.global.qa.mockservertest;
 
 import org.mockserver.client.MockServerClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import com.solera.global.qa.mockservertest.utils.MockServerUtils;
-import com.solera.global.qa.mockservertest.utils.PropertyUtils;
+import com.solera.global.qa.mockservertest.utils.common.PropertyUtils;
 
-public class MockServerBase {
+public class MockServerTestBase {
 
   protected final String HOST = PropertyUtils.getInstance().getProperty("host");
   protected final int PORT = Integer.parseInt(PropertyUtils.getInstance().getProperty("port"));

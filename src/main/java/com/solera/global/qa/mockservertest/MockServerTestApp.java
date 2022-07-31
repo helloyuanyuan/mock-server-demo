@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class MockServerTest {
-  public static void main(String[] args) {
-    SpringApplication.run(MockServerTest.class, args);
-  }
+public class MockServerTestApp {
+    public static void main(String[] args) {
+        SpringApplication.run(MockServerTestApp.class, args);
+    }
 
 }

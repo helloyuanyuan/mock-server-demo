@@ -10,10 +10,10 @@ import org.mockserver.model.Header;
 import org.mockserver.verify.VerificationTimes;
 import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.solera.global.qa.mockservertest.common.MockServerBase;
+import com.solera.global.qa.mockservertest.MockServerTestBase;
 
 @Component
-public class MockServerUtils extends MockServerBase {
+public class MockServerUtils extends MockServerTestBase {
 
   public void createOpenApiExpectation() {
     client
@@ -32,7 +32,8 @@ public class MockServerUtils extends MockServerBase {
     client
         .when(openAPI(OPEN_API_URL, operationId))
         .respond(response().withStatusCode(statusCode)
-            .withHeader(new Header("Content-Type", "application/json")).withBody(bodyString));
+            .withHeader(new Header("Content-Type", "application/json"))
+            .withBody(bodyString));
   }
 
   public void reset() {

@@ -10,43 +10,43 @@ import org.junit.jupiter.api.Test;
 import org.mockserver.model.Header;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.solera.global.qa.mockservertest.MockServerTestBase;
 import com.solera.global.qa.mockservertest.beans.Org;
-import com.solera.global.qa.mockservertest.common.MockServerBase;
 import io.restassured.http.ContentType;
 
 @SpringBootTest
 @DisplayName("MockServerMethodPostTests")
-class MockServerMethodPostTests extends MockServerBase {
+class MockServerMethodPostTests extends MockServerTestBase {
 
-    @BeforeEach
-    void beforeEach() {
-        mockServerUtils.reset();
-    }
+  @BeforeEach
+  void beforeEach() {
+    mockServerUtils.reset();
+  }
 
-    @Test
-    void testPostWithJsonBodyReturnJsonBodyToClass() throws Exception {
-        Org org = new Org();
-        org.setId("1");
-        org.setOrgName("solera");
+  @Test
+  void testPostWithJsonBodyReturnJsonBodyToClass() throws Exception {
+    Org org = new Org();
+    org.setId("1");
+    org.setOrgName("solera");
 
-        String body = new ObjectMapper().writeValueAsString(org);
+    String body = new ObjectMapper().writeValueAsString(org);
 
-        client
-                .when(request().withMethod("POST").withPath("/org/create")
-                        .withHeader(new Header("Content-Type", "application/json")).withBody(body))
-                .respond(response().withStatusCode(200)
-                        .withHeader(new Header("Content-Type", "application/json")).withBody(body));
+    client
+        .when(request().withMethod("POST").withPath("/org/create")
+            .withHeader(new Header("Content-Type", "application/json")).withBody(body))
+        .respond(response().withStatusCode(200)
+            .withHeader(new Header("Content-Type", "application/json")).withBody(body));
 
-        Org actualResult = given().log().all()
-                .contentType(ContentType.JSON)
-                .body(org)
-                .then().log().all().statusCode(200)
-                .when().post(URL + "/org/create").as(Org.class);
+    Org actualResult = given().log().all()
+        .contentType(ContentType.JSON)
+        .body(org)
+        .then().log().all().statusCode(200)
+        .when().post(URL + "/org/create").as(Org.class);
 
-        Assertions.assertThat(actualResult.getId()).isEqualTo(org.getId());
-        Assertions.assertThat(actualResult.getOrgName()).isEqualTo(org.getOrgName());
+    Assertions.assertThat(actualResult.getId()).isEqualTo(org.getId());
+    Assertions.assertThat(actualResult.getOrgName()).isEqualTo(org.getOrgName());
 
-        mockServerUtils.verify("/org/create", "POST");
-    }
+    mockServerUtils.verify("/org/create", "POST");
+  }
 
 }

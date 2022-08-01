@@ -1,4 +1,4 @@
-package com.solera.global.qa.mockservertest.beans;
+package com.solera.global.qa.mockservertest.model;
 
 import lombok.Data;
 

@@ -1,2 +1,0 @@
-<!ELEMENT suite (class)>
-<!ELEMENT class (#PCDATA)>

@@ -5,12 +5,12 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-import com.solera.global.qa.mockservertest.common.junitExtension.OpenApiPetstoreExtension;
+import com.solera.global.qa.mockservertest.common.junitExtension.SchedulingApiV2SkillExtension;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 @Target({TYPE, METHOD, ANNOTATION_TYPE})
 @Retention(RUNTIME)
-@ExtendWith(OpenApiPetstoreExtension.class)
-public @interface OpenApiPetstore {}
+@ExtendWith(SchedulingApiV2SkillExtension.class)
+public @interface SchedulingApiV2Skill {}

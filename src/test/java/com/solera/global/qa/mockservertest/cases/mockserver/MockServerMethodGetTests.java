@@ -4,7 +4,6 @@ import static io.restassured.RestAssured.given;
 import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,9 +19,6 @@ import com.solera.global.qa.mockservertest.common.junitLogger.LifecycleLogger;
 @DisplayName("MockServerMethodGetTests")
 @Duration
 class MockServerMethodGetTests extends MockServerTestBase implements LifecycleLogger {
-
-  @BeforeAll
-  void beforeAll() {}
 
   @BeforeEach
   void beforeEach() {

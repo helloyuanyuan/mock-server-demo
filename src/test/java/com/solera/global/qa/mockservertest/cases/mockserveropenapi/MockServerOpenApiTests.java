@@ -27,7 +27,7 @@ class MockServerOpenApiTests extends MockServerTestBase implements LifecycleLogg
   Error e500 = new Error(500, "Internal Server Error");
 
   @Test
-  void testSomePath() throws Exception {
+  void testSomePathStatusCode200() throws Exception {
     Pet actualResult = given().log().all()
         .queryParam("limit", "200")
         .header(new io.restassured.http.Header("X-Request-ID",
@@ -39,7 +39,18 @@ class MockServerOpenApiTests extends MockServerTestBase implements LifecycleLogg
   }
 
   @Test
-  void testShowPetById() throws Exception {
+  void testSomePathStatusCode404() throws Exception {
+    given().log().all()
+        .queryParam("limit", "404")
+        .header(new io.restassured.http.Header("X-Request-ID",
+            UUID.randomUUID().toString()))
+        .then().log().all()
+        .expect().statusCode(404)
+        .when().get(MOCKSERVERURL + "/some/path");
+  }
+
+  @Test
+  void testShowPetByIdStatusCode200400500() throws Exception {
     testShowPetById("200123", 200, pet);
     testShowPetById("400123", 400, e400);
     testShowPetById("500123", 500, e500);
@@ -54,7 +65,17 @@ class MockServerOpenApiTests extends MockServerTestBase implements LifecycleLogg
         .expect().statusCode(statusCode)
         .when().get(MOCKSERVERURL + "/pets/{petId}").as(object.getClass());
     Assertions.assertThat(actualResult).isEqualTo(object);
+  }
 
+  @Test
+  void testShowPetByIdStatusCode404() throws Exception {
+    given().log().all()
+        .pathParam("petId", "404123")
+        .header(new io.restassured.http.Header("X-Request-ID",
+            UUID.randomUUID().toString()))
+        .then().log().all()
+        .expect().statusCode(404)
+        .when().get(MOCKSERVERURL + "/pets/{petId}");
   }
 
   @Test
@@ -78,6 +99,15 @@ class MockServerOpenApiTests extends MockServerTestBase implements LifecycleLogg
   }
 
   @Test
+  void testlistPetsStatusCode404() throws Exception {
+    given().log().all()
+        .queryParam("limit", "404")
+        .then().log().all()
+        .expect().statusCode(404)
+        .when().get(MOCKSERVERURL + "/pets");
+  }
+
+  @Test
   void testCreatePetsStatusCode201() throws Exception {
     Pet pet = new Pet(201, "Cat", "CAT");
     given().log().all()
@@ -98,6 +128,17 @@ class MockServerOpenApiTests extends MockServerTestBase implements LifecycleLogg
         .expect().statusCode(500)
         .when().post(MOCKSERVERURL + "/pets").as(Error.class);
     Assertions.assertThat(actualResult).isEqualTo(e500);
+  }
+
+  @Test
+  void testCreatePetsStatusCode404() throws Exception {
+    Pet pet = new Pet(404, "Cat", "CAT");
+    given().log().all()
+        .contentType(ContentType.JSON)
+        .body(pet)
+        .then().log().all()
+        .expect().statusCode(404)
+        .when().post(MOCKSERVERURL + "/pets");
   }
 
 }

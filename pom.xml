@@ -13,7 +13,7 @@
   <name>mockservertest</name>
   <description>Mock Server Test Project</description>
   <properties>
-    <java.version>8</java.version>
+    <java.version>1.8</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
@@ -27,6 +27,7 @@
     <aspectj.version>1.8.10</aspectj.version>
     <allure-junit5.version>2.13.2</allure-junit5.version>
     <allure-maven.version>2.11.2</allure-maven.version>
+    <fmt-maven-plugin.version>2.13</fmt-maven-plugin.version>
   </properties>
   <dependencies>
     <dependency>
@@ -114,6 +115,27 @@
         <groupId>io.qameta.allure</groupId>
         <artifactId>allure-maven</artifactId>
         <version>${allure-maven.version}</version>
+      </plugin>
+      <plugin>
+        <groupId>com.coveo</groupId>
+        <artifactId>fmt-maven-plugin</artifactId>
+        <version>${fmt-maven-plugin.version}</version>
+        <configuration>
+          <sourceDirectory>src/main/java</sourceDirectory>
+          <testSourceDirectory>src/test/java</testSourceDirectory>
+          <verbose>false</verbose>
+          <filesNamePattern>.*\.java</filesNamePattern>
+          <skip>false</skip>
+          <skipSortingImports>false</skipSortingImports>
+          <style>google</style>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

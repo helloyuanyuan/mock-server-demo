@@ -3,17 +3,15 @@ package com.solera.global.qa.mockservertest.beans;
 import lombok.Data;
 
 @Data
-public class Pet {
+public class SkillResult {
 
   private Integer id;
   private String name;
-  private String tag;
 
-  public Pet() {}
+  public SkillResult() {}
 
-  public Pet(Integer id, String name, String tag) {
+  public SkillResult(Integer id, String name) {
     this.id = id;
     this.name = name;
-    this.tag = tag;
   }
 }

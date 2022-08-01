@@ -26,7 +26,7 @@ public class PropertyUtils {
     this.properties = loadProperties(propertiesFile);
   }
 
-  synchronized public static Properties loadProperties(String propertiesFile) {
+  public static synchronized Properties loadProperties(String propertiesFile) {
     Properties properties = new Properties();
     InputStream in = null;
     try {
@@ -55,6 +55,4 @@ public class PropertyUtils {
   public String getUrl(String host, int port) {
     return "http://" + host + ":" + port;
   }
-
 }
-

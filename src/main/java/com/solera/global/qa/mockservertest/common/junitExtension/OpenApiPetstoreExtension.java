@@ -3,14 +3,15 @@ package com.solera.global.qa.mockservertest.common.junitExtension;
 import static org.mockserver.model.HttpResponse.notFoundResponse;
 import static org.mockserver.model.HttpResponse.response;
 import static org.mockserver.model.OpenAPIDefinition.openAPI;
-import java.util.Arrays;
-import org.junit.jupiter.api.extension.BeforeTestExecutionCallback;
-import org.junit.jupiter.api.extension.ExtensionContext;
-import org.mockserver.model.Header;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.solera.global.qa.mockservertest.MockServerTestBase;
 import com.solera.global.qa.mockservertest.beans.Error;
 import com.solera.global.qa.mockservertest.beans.Pet;
+import java.util.Arrays;
+import org.junit.jupiter.api.extension.BeforeTestExecutionCallback;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.mockserver.model.Header;
 
 public class OpenApiPetstoreExtension extends MockServerTestBase
     implements BeforeTestExecutionCallback {
@@ -33,12 +34,12 @@ public class OpenApiPetstoreExtension extends MockServerTestBase
         .when(openAPI(OPENAPIURL, "somePath"))
         .respond(
             httpRequest -> {
-              if (httpRequest.getQueryStringParameters().getValues("limit").get(0)
+              if (httpRequest
+                  .getQueryStringParameters()
+                  .getValues("limit")
+                  .get(0)
                   .startsWith("200")) {
-                return response()
-                    .withStatusCode(200)
-                    .withHeaders(header)
-                    .withBody(petString);
+                return response().withStatusCode(200).withHeaders(header).withBody(petString);
               } else {
                 return notFoundResponse();
               }
@@ -48,26 +49,14 @@ public class OpenApiPetstoreExtension extends MockServerTestBase
         .when(openAPI(OPENAPIURL, "showPetById"))
         .respond(
             httpRequest -> {
-              if (httpRequest.getPathParameters().getValues("petId").get(0)
-                  .startsWith("200")) {
-                return response()
-                    .withStatusCode(200)
-                    .withHeaders(header)
-                    .withBody(petString);
+              if (httpRequest.getPathParameters().getValues("petId").get(0).startsWith("200")) {
+                return response().withStatusCode(200).withHeaders(header).withBody(petString);
               }
-              if (httpRequest.getPathParameters().getValues("petId").get(0)
-                  .startsWith("400")) {
-                return response()
-                    .withStatusCode(400)
-                    .withHeaders(header)
-                    .withBody(eString400);
+              if (httpRequest.getPathParameters().getValues("petId").get(0).startsWith("400")) {
+                return response().withStatusCode(400).withHeaders(header).withBody(eString400);
               }
-              if (httpRequest.getPathParameters().getValues("petId").get(0)
-                  .startsWith("500")) {
-                return response()
-                    .withStatusCode(500)
-                    .withHeaders(header)
-                    .withBody(eString500);
+              if (httpRequest.getPathParameters().getValues("petId").get(0).startsWith("500")) {
+                return response().withStatusCode(500).withHeaders(header).withBody(eString500);
               } else {
                 return notFoundResponse();
               }
@@ -77,19 +66,19 @@ public class OpenApiPetstoreExtension extends MockServerTestBase
         .when(openAPI(OPENAPIURL, "listPets"))
         .respond(
             httpRequest -> {
-              if (httpRequest.getQueryStringParameters().getValues("limit").get(0)
+              if (httpRequest
+                  .getQueryStringParameters()
+                  .getValues("limit")
+                  .get(0)
                   .startsWith("200")) {
-                return response()
-                    .withStatusCode(200)
-                    .withHeaders(header)
-                    .withBody(petsString);
+                return response().withStatusCode(200).withHeaders(header).withBody(petsString);
               }
-              if (httpRequest.getQueryStringParameters().getValues("limit").get(0)
+              if (httpRequest
+                  .getQueryStringParameters()
+                  .getValues("limit")
+                  .get(0)
                   .startsWith("500")) {
-                return response()
-                    .withStatusCode(500)
-                    .withHeaders(header)
-                    .withBody(eString500);
+                return response().withStatusCode(500).withHeaders(header).withBody(eString500);
               } else {
                 return notFoundResponse();
               }
@@ -100,20 +89,13 @@ public class OpenApiPetstoreExtension extends MockServerTestBase
         .respond(
             httpRequest -> {
               if (httpRequest.getBodyAsString().contains("201")) {
-                return response()
-                    .withStatusCode(201)
-                    .withHeaders(header);
+                return response().withStatusCode(201).withHeaders(header);
               }
               if (httpRequest.getBody().toString().contains("500")) {
-                return response()
-                    .withStatusCode(500)
-                    .withHeaders(header)
-                    .withBody(eString500);
+                return response().withStatusCode(500).withHeaders(header).withBody(eString500);
               } else {
                 return notFoundResponse();
               }
             });
-
   }
-
 }

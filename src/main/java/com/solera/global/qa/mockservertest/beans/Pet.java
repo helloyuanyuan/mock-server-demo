@@ -16,5 +16,4 @@ public class Pet {
     this.name = name;
     this.tag = tag;
   }
-
 }

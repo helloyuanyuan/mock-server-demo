@@ -31,5 +31,4 @@ public class DurationExtension implements BeforeTestExecutionCallback, AfterTest
   private Store getStore(ExtensionContext context) {
     return context.getStore(Namespace.create(getClass(), context.getRequiredTestMethod()));
   }
-
 }

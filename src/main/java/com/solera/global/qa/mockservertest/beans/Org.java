@@ -7,5 +7,4 @@ public class Org {
 
   private String id;
   private String orgName;
-
 }

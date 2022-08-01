@@ -6,6 +6,12 @@ import static org.mockserver.model.Header.header;
 import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
 import static org.mockserver.model.Parameter.param;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.solera.global.qa.mockservertest.MockServerTestBase;
+import com.solera.global.qa.mockservertest.beans.Org;
+import com.solera.global.qa.mockservertest.common.junitAnnotation.Duration;
+import com.solera.global.qa.mockservertest.common.junitLogger.LifecycleLogger;
 import java.util.UUID;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.assertj.core.api.Assertions;
@@ -15,11 +21,6 @@ import org.junit.jupiter.api.Test;
 import org.mockserver.matchers.Times;
 import org.mockserver.model.Header;
 import org.springframework.boot.test.context.SpringBootTest;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.solera.global.qa.mockservertest.MockServerTestBase;
-import com.solera.global.qa.mockservertest.beans.Org;
-import com.solera.global.qa.mockservertest.common.junitAnnotation.Duration;
-import com.solera.global.qa.mockservertest.common.junitLogger.LifecycleLogger;
 
 @SpringBootTest
 @DisplayName("MockServerGenericTests")
@@ -37,9 +38,17 @@ class MockServerGenericTests extends MockServerTestBase implements LifecycleLogg
         .when(request().withPath("/some/path"))
         .respond(response().withBody("some_response_body"));
 
-    String actualResult = given().log().all()
-        .then().log().all().statusCode(200)
-        .when().get(MOCKSERVERURL + "/some/path").asString();
+    String actualResult =
+        given()
+            .log()
+            .all()
+            .then()
+            .log()
+            .all()
+            .statusCode(200)
+            .when()
+            .get(MOCKSERVERURL + "/some/path")
+            .asString();
 
     Assertions.assertThat(actualResult).isEqualTo("some_response_body");
   }
@@ -47,20 +56,38 @@ class MockServerGenericTests extends MockServerTestBase implements LifecycleLogg
   @Test
   void testCreateExpectationWithPathParameterRegex() {
     client
-        .when(request().withPath("/some/path/{cartId}")
-            .withPathParameters(param("cartId", "[A-Z0-9\\-]+")))
+        .when(
+            request()
+                .withPath("/some/path/{cartId}")
+                .withPathParameters(param("cartId", "[A-Z0-9\\-]+")))
         .respond(response().withBody("some_response_body"));
 
-    String actualResult = given().log().all()
-        .pathParam("cartId", "A123")
-        .then().log().all().statusCode(200)
-        .when().get(MOCKSERVERURL + "/some/path/{cartId}").asString();
+    String actualResult =
+        given()
+            .log()
+            .all()
+            .pathParam("cartId", "A123")
+            .then()
+            .log()
+            .all()
+            .statusCode(200)
+            .when()
+            .get(MOCKSERVERURL + "/some/path/{cartId}")
+            .asString();
 
     Assertions.assertThat(actualResult).isEqualTo("some_response_body");
 
-    actualResult = given().log().all()
-        .then().log().all().statusCode(200)
-        .when().get(MOCKSERVERURL + "/some/path/{cartId}", "B223").asString();
+    actualResult =
+        given()
+            .log()
+            .all()
+            .then()
+            .log()
+            .all()
+            .statusCode(200)
+            .when()
+            .get(MOCKSERVERURL + "/some/path/{cartId}", "B223")
+            .asString();
 
     Assertions.assertThat(actualResult).isEqualTo("some_response_body");
   }
@@ -75,15 +102,29 @@ class MockServerGenericTests extends MockServerTestBase implements LifecycleLogg
     String body = new ObjectMapper().writeValueAsString(org);
 
     client
-        .when(request().withMethod("GET").withPath("/org")
-            .withQueryStringParameter("orgName", "[A-z]{0,10}"))
-        .respond(response().withStatusCode(200)
-            .withHeader(new Header("Content-Type", "application/json")).withBody(body));
+        .when(
+            request()
+                .withMethod("GET")
+                .withPath("/org")
+                .withQueryStringParameter("orgName", "[A-z]{0,10}"))
+        .respond(
+            response()
+                .withStatusCode(200)
+                .withHeader(new Header("Content-Type", "application/json"))
+                .withBody(body));
 
-    Org actualResult = given().log().all()
-        .queryParam("orgName", orgName)
-        .then().log().all().statusCode(200)
-        .when().get(MOCKSERVERURL + "/org").as(Org.class);
+    Org actualResult =
+        given()
+            .log()
+            .all()
+            .queryParam("orgName", orgName)
+            .then()
+            .log()
+            .all()
+            .statusCode(200)
+            .when()
+            .get(MOCKSERVERURL + "/org")
+            .as(Org.class);
 
     Assertions.assertThat(actualResult.getOrgName()).isEqualTo(orgName);
   }
@@ -91,16 +132,22 @@ class MockServerGenericTests extends MockServerTestBase implements LifecycleLogg
   @Test
   void testCreateExpectationWithHeadersRegex() {
     client
-        .when(request().withMethod("GET").withPath("/some/path")
-            .withHeaders(
-                header("Accept.*")))
+        .when(request().withMethod("GET").withPath("/some/path").withHeaders(header("Accept.*")))
         .respond(response().withBody("some_response_body"));
 
-    String actualResult = given().log().all()
-        .header(new io.restassured.http.Header("Accept", "application/json"))
-        .header(new io.restassured.http.Header("Accept-Encoding", "gzip, deflate, br"))
-        .then().log().all().statusCode(200)
-        .when().get(MOCKSERVERURL + "/some/path").asString();
+    String actualResult =
+        given()
+            .log()
+            .all()
+            .header(new io.restassured.http.Header("Accept", "application/json"))
+            .header(new io.restassured.http.Header("Accept-Encoding", "gzip, deflate, br"))
+            .then()
+            .log()
+            .all()
+            .statusCode(200)
+            .when()
+            .get(MOCKSERVERURL + "/some/path")
+            .asString();
 
     Assertions.assertThat(actualResult).isEqualTo("some_response_body");
   }
@@ -108,17 +155,31 @@ class MockServerGenericTests extends MockServerTestBase implements LifecycleLogg
   @Test
   void testCreateExpectationWithCookies() {
     client
-        .when(request().withMethod("GET").withPath("/some/path")
-            .withCookies(
-                cookie("sessionA", "4930456C-C718-476F-971F-CB8E047AB348"),
-                cookie("sessionB", "4930456C-C718-476F-971F-CB8E047AB349")))
+        .when(
+            request()
+                .withMethod("GET")
+                .withPath("/some/path")
+                .withCookies(
+                    cookie("sessionA", "4930456C-C718-476F-971F-CB8E047AB348"),
+                    cookie("sessionB", "4930456C-C718-476F-971F-CB8E047AB349")))
         .respond(response().withBody("some_response_body"));
 
-    String actualResult = given().log().all()
-        .cookies("sessionA", "4930456C-C718-476F-971F-CB8E047AB348",
-            "sessionB", "4930456C-C718-476F-971F-CB8E047AB349")
-        .then().log().all().statusCode(200)
-        .when().get(MOCKSERVERURL + "/some/path").asString();
+    String actualResult =
+        given()
+            .log()
+            .all()
+            .cookies(
+                "sessionA",
+                "4930456C-C718-476F-971F-CB8E047AB348",
+                "sessionB",
+                "4930456C-C718-476F-971F-CB8E047AB349")
+            .then()
+            .log()
+            .all()
+            .statusCode(200)
+            .when()
+            .get(MOCKSERVERURL + "/some/path")
+            .asString();
 
     Assertions.assertThat(actualResult).isEqualTo("some_response_body");
   }
@@ -130,22 +191,40 @@ class MockServerGenericTests extends MockServerTestBase implements LifecycleLogg
     String bodyB = "BBB";
 
     client
-        .when(request().withMethod("GET").withPath("/hello")).withId(expectationID)
+        .when(request().withMethod("GET").withPath("/hello"))
+        .withId(expectationID)
         .respond(response().withStatusCode(200).withBody(bodyA));
 
-    String actualResult = given().log().all()
-        .then().log().all().statusCode(200)
-        .when().get(MOCKSERVERURL + "/hello").asString();
+    String actualResult =
+        given()
+            .log()
+            .all()
+            .then()
+            .log()
+            .all()
+            .statusCode(200)
+            .when()
+            .get(MOCKSERVERURL + "/hello")
+            .asString();
 
     Assertions.assertThat(actualResult).isEqualTo("AAA");
 
     client
-        .when(request().withMethod("GET").withPath("/hello")).withId(expectationID)
+        .when(request().withMethod("GET").withPath("/hello"))
+        .withId(expectationID)
         .respond(response().withStatusCode(200).withBody(bodyB));
 
-    actualResult = given().log().all()
-        .then().log().all().statusCode(200)
-        .when().get(MOCKSERVERURL + "/hello").asString();
+    actualResult =
+        given()
+            .log()
+            .all()
+            .then()
+            .log()
+            .all()
+            .statusCode(200)
+            .when()
+            .get(MOCKSERVERURL + "/hello")
+            .asString();
 
     Assertions.assertThat(actualResult).isEqualTo("BBB");
   }
@@ -155,15 +234,25 @@ class MockServerGenericTests extends MockServerTestBase implements LifecycleLogg
     String bodyA = "AAA";
     String bodyB = "BBB";
 
-    client.when(request().withMethod("GET").withPath("/hello"))
+    client
+        .when(request().withMethod("GET").withPath("/hello"))
         .respond(response().withStatusCode(200).withBody(bodyA));
 
-    client.when(request().withMethod("GET").withPath("/hello"))
+    client
+        .when(request().withMethod("GET").withPath("/hello"))
         .respond(response().withStatusCode(200).withBody(bodyB));
 
-    String actualResult = given().log().all()
-        .then().log().all().statusCode(200)
-        .when().get(MOCKSERVERURL + "/hello").asString();
+    String actualResult =
+        given()
+            .log()
+            .all()
+            .then()
+            .log()
+            .all()
+            .statusCode(200)
+            .when()
+            .get(MOCKSERVERURL + "/hello")
+            .asString();
 
     Assertions.assertThat(actualResult).isEqualTo("AAA");
   }
@@ -173,17 +262,27 @@ class MockServerGenericTests extends MockServerTestBase implements LifecycleLogg
     String bodyA = "AAA";
     String bodyB = "BBB";
 
-    client.when(request().withMethod("GET").withPath("/hello"))
+    client
+        .when(request().withMethod("GET").withPath("/hello"))
         .withPriority(1)
         .respond(response().withStatusCode(200).withBody(bodyA));
 
-    client.when(request().withMethod("GET").withPath("/hello"))
+    client
+        .when(request().withMethod("GET").withPath("/hello"))
         .withPriority(2)
         .respond(response().withStatusCode(200).withBody(bodyB));
 
-    String body = given().log().all()
-        .then().log().all().statusCode(200)
-        .when().get(MOCKSERVERURL + "/hello").asString();
+    String body =
+        given()
+            .log()
+            .all()
+            .then()
+            .log()
+            .all()
+            .statusCode(200)
+            .when()
+            .get(MOCKSERVERURL + "/hello")
+            .asString();
 
     Assertions.assertThat(body).isEqualTo("BBB");
   }
@@ -201,22 +300,45 @@ class MockServerGenericTests extends MockServerTestBase implements LifecycleLogg
         .when(request().withMethod("GET").withPath("/hello"), Times.exactly(1))
         .respond(response().withStatusCode(200).withBody(bodyB));
 
-    String actualResult = given().log().all()
-        .then().log().all().statusCode(200)
-        .when().get(MOCKSERVERURL + "/hello").asString();
+    String actualResult =
+        given()
+            .log()
+            .all()
+            .then()
+            .log()
+            .all()
+            .statusCode(200)
+            .when()
+            .get(MOCKSERVERURL + "/hello")
+            .asString();
 
     Assertions.assertThat(actualResult).isEqualTo("AAA");
 
-    actualResult = given().log().all()
-        .then().log().all().statusCode(200)
-        .when().get(MOCKSERVERURL + "/hello").asString();
+    actualResult =
+        given()
+            .log()
+            .all()
+            .then()
+            .log()
+            .all()
+            .statusCode(200)
+            .when()
+            .get(MOCKSERVERURL + "/hello")
+            .asString();
 
     Assertions.assertThat(actualResult).isEqualTo("BBB");
 
-    actualResult = given().log().all()
-        .then().log().all().statusCode(404)
-        .when().get(MOCKSERVERURL + "/hello").statusLine();
+    actualResult =
+        given()
+            .log()
+            .all()
+            .then()
+            .log()
+            .all()
+            .statusCode(404)
+            .when()
+            .get(MOCKSERVERURL + "/hello")
+            .statusLine();
     Assertions.assertThat(actualResult).contains("Not Found");
   }
-
 }

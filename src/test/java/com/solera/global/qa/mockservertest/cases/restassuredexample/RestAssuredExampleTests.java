@@ -1,16 +1,22 @@
-package com.solera.global.qa.mockservertest;
+package com.solera.global.qa.mockservertest.cases.restassuredexample;
 
 import static io.restassured.RestAssured.given;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.ResourceUtils;
+import com.solera.global.qa.mockservertest.MockServerTestBase;
 import com.solera.global.qa.mockservertest.beans.Org;
+import com.solera.global.qa.mockservertest.common.junitAnnotation.Duration;
+import com.solera.global.qa.mockservertest.common.junitLogger.LifecycleLogger;
 import io.restassured.http.ContentType;
 
 @SpringBootTest
-class RestAssuredExampleTests {
+@DisplayName("RestAssuredExampleTests")
+@Duration
+class RestAssuredExampleTests extends MockServerTestBase implements LifecycleLogger {
 
   private final String URL = "https://httpbin.org";
 

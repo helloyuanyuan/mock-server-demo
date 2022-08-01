@@ -1,11 +1,13 @@
-package com.solera.global.qa.mockservertest.utils;
+package com.solera.global.qa.mockservertest.common;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Properties;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class PropertyUtils {
 
   static PropertyUtils instance;
@@ -31,16 +33,16 @@ public class PropertyUtils {
       in = PropertyUtils.class.getClassLoader().getResourceAsStream(propertiesFile);
       properties.load(new InputStreamReader(in, "UTF-8"));
     } catch (FileNotFoundException e) {
-      LogUtils.error(propertiesFile + "FILE NOT FOUND!");
+      log.error(propertiesFile, "FILE NOT FOUND!");
     } catch (IOException e) {
-      LogUtils.error(propertiesFile + "LOADING IOException!");
+      log.error(propertiesFile, "LOADING IOException!");
     } finally {
       try {
         if (null != in) {
           in.close();
         }
       } catch (IOException e) {
-        LogUtils.error(propertiesFile + "CLOSING IOException!");
+        log.error(propertiesFile, "CLOSING IOException!");
       }
     }
     return properties;
@@ -48,6 +50,10 @@ public class PropertyUtils {
 
   public String getProperty(String key) {
     return properties.getProperty(key);
+  }
+
+  public String getUrl(String host, int port) {
+    return "http://" + host + ":" + port;
   }
 
 }

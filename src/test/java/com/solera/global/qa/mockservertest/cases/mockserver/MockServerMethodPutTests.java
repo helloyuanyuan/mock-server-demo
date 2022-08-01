@@ -1,27 +1,29 @@
-package com.solera.global.qa.mockservertest;
+package com.solera.global.qa.mockservertest.cases.mockserver;
 
 import static io.restassured.RestAssured.given;
 import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.mockserver.model.Header;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.solera.global.qa.mockservertest.MockServerTestBase;
 import com.solera.global.qa.mockservertest.beans.Org;
-import com.solera.global.qa.mockservertest.common.MockServerBase;
+import com.solera.global.qa.mockservertest.common.junitAnnotation.Duration;
+import com.solera.global.qa.mockservertest.common.junitLogger.LifecycleLogger;
 import io.restassured.http.ContentType;
 
 @SpringBootTest
-@TestInstance(Lifecycle.PER_CLASS)
-class MockServerMethodPutTests extends MockServerBase {
+@DisplayName("MockServerMethodPutTests")
+@Duration
+class MockServerMethodPutTests extends MockServerTestBase implements LifecycleLogger {
 
   @BeforeEach
   void beforeEach() {
-    mockServerUtils.reset();
+    resetMockServer();
   }
 
   @Test
@@ -42,14 +44,15 @@ class MockServerMethodPutTests extends MockServerBase {
             .withPathParameter("orgId", "^\\d+$")
             .withHeader(new Header("Content-Type", "application/json")).withBody(body))
         .respond(response().withStatusCode(200)
-            .withHeader(new Header("Content-Type", "application/json")).withBody(bodyUpdated));
+            .withHeader(new Header("Content-Type", "application/json"))
+            .withBody(bodyUpdated));
 
     Org actualResult = given().log().all()
         .contentType(ContentType.JSON)
         .pathParam("orgId", org.getId())
         .body(org)
         .then().log().all().statusCode(200)
-        .when().put(URL + "/org/{orgId}").as(Org.class);
+        .when().put(MOCKSERVERURL + "/org/{orgId}").as(Org.class);
 
     Assertions.assertThat(actualResult.getId()).isEqualTo(orgUpdated.getId());
     Assertions.assertThat(actualResult.getOrgName()).isEqualTo(orgUpdated.getOrgName());

@@ -1,4 +1,4 @@
-package com.solera.global.qa.mockservertest;
+package com.solera.global.qa.mockservertest.cases.mockserver;
 
 import static io.restassured.RestAssured.given;
 import static org.mockserver.model.Cookie.cookie;
@@ -10,23 +10,25 @@ import java.util.UUID;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.mockserver.matchers.Times;
 import org.mockserver.model.Header;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.solera.global.qa.mockservertest.MockServerTestBase;
 import com.solera.global.qa.mockservertest.beans.Org;
-import com.solera.global.qa.mockservertest.common.MockServerBase;
+import com.solera.global.qa.mockservertest.common.junitAnnotation.Duration;
+import com.solera.global.qa.mockservertest.common.junitLogger.LifecycleLogger;
 
 @SpringBootTest
-@TestInstance(Lifecycle.PER_CLASS)
-class MockServerGenericTests extends MockServerBase {
+@DisplayName("MockServerGenericTests")
+@Duration
+class MockServerGenericTests extends MockServerTestBase implements LifecycleLogger {
 
   @BeforeEach
   void beforeEach() {
-    mockServerUtils.reset();
+    resetMockServer();
   }
 
   @Test
@@ -37,7 +39,7 @@ class MockServerGenericTests extends MockServerBase {
 
     String actualResult = given().log().all()
         .then().log().all().statusCode(200)
-        .when().get(URL + "/some/path").asString();
+        .when().get(MOCKSERVERURL + "/some/path").asString();
 
     Assertions.assertThat(actualResult).isEqualTo("some_response_body");
   }
@@ -52,13 +54,13 @@ class MockServerGenericTests extends MockServerBase {
     String actualResult = given().log().all()
         .pathParam("cartId", "A123")
         .then().log().all().statusCode(200)
-        .when().get(URL + "/some/path/{cartId}").asString();
+        .when().get(MOCKSERVERURL + "/some/path/{cartId}").asString();
 
     Assertions.assertThat(actualResult).isEqualTo("some_response_body");
 
     actualResult = given().log().all()
         .then().log().all().statusCode(200)
-        .when().get(URL + "/some/path/{cartId}", "B223").asString();
+        .when().get(MOCKSERVERURL + "/some/path/{cartId}", "B223").asString();
 
     Assertions.assertThat(actualResult).isEqualTo("some_response_body");
   }
@@ -81,7 +83,7 @@ class MockServerGenericTests extends MockServerBase {
     Org actualResult = given().log().all()
         .queryParam("orgName", orgName)
         .then().log().all().statusCode(200)
-        .when().get(URL + "/org").as(Org.class);
+        .when().get(MOCKSERVERURL + "/org").as(Org.class);
 
     Assertions.assertThat(actualResult.getOrgName()).isEqualTo(orgName);
   }
@@ -98,7 +100,7 @@ class MockServerGenericTests extends MockServerBase {
         .header(new io.restassured.http.Header("Accept", "application/json"))
         .header(new io.restassured.http.Header("Accept-Encoding", "gzip, deflate, br"))
         .then().log().all().statusCode(200)
-        .when().get(URL + "/some/path").asString();
+        .when().get(MOCKSERVERURL + "/some/path").asString();
 
     Assertions.assertThat(actualResult).isEqualTo("some_response_body");
   }
@@ -116,7 +118,7 @@ class MockServerGenericTests extends MockServerBase {
         .cookies("sessionA", "4930456C-C718-476F-971F-CB8E047AB348",
             "sessionB", "4930456C-C718-476F-971F-CB8E047AB349")
         .then().log().all().statusCode(200)
-        .when().get(URL + "/some/path").asString();
+        .when().get(MOCKSERVERURL + "/some/path").asString();
 
     Assertions.assertThat(actualResult).isEqualTo("some_response_body");
   }
@@ -133,7 +135,7 @@ class MockServerGenericTests extends MockServerBase {
 
     String actualResult = given().log().all()
         .then().log().all().statusCode(200)
-        .when().get(URL + "/hello").asString();
+        .when().get(MOCKSERVERURL + "/hello").asString();
 
     Assertions.assertThat(actualResult).isEqualTo("AAA");
 
@@ -143,7 +145,7 @@ class MockServerGenericTests extends MockServerBase {
 
     actualResult = given().log().all()
         .then().log().all().statusCode(200)
-        .when().get(URL + "/hello").asString();
+        .when().get(MOCKSERVERURL + "/hello").asString();
 
     Assertions.assertThat(actualResult).isEqualTo("BBB");
   }
@@ -161,7 +163,7 @@ class MockServerGenericTests extends MockServerBase {
 
     String actualResult = given().log().all()
         .then().log().all().statusCode(200)
-        .when().get(URL + "/hello").asString();
+        .when().get(MOCKSERVERURL + "/hello").asString();
 
     Assertions.assertThat(actualResult).isEqualTo("AAA");
   }
@@ -181,7 +183,7 @@ class MockServerGenericTests extends MockServerBase {
 
     String body = given().log().all()
         .then().log().all().statusCode(200)
-        .when().get(URL + "/hello").asString();
+        .when().get(MOCKSERVERURL + "/hello").asString();
 
     Assertions.assertThat(body).isEqualTo("BBB");
   }
@@ -201,19 +203,19 @@ class MockServerGenericTests extends MockServerBase {
 
     String actualResult = given().log().all()
         .then().log().all().statusCode(200)
-        .when().get(URL + "/hello").asString();
+        .when().get(MOCKSERVERURL + "/hello").asString();
 
     Assertions.assertThat(actualResult).isEqualTo("AAA");
 
     actualResult = given().log().all()
         .then().log().all().statusCode(200)
-        .when().get(URL + "/hello").asString();
+        .when().get(MOCKSERVERURL + "/hello").asString();
 
     Assertions.assertThat(actualResult).isEqualTo("BBB");
 
     actualResult = given().log().all()
         .then().log().all().statusCode(404)
-        .when().get(URL + "/hello").statusLine();
+        .when().get(MOCKSERVERURL + "/hello").statusLine();
     Assertions.assertThat(actualResult).contains("Not Found");
   }
 

@@ -9,5 +9,4 @@ import org.junit.platform.suite.api.SuiteDisplayName;
 @SuiteDisplayName("Mock Server Test")
 @SelectPackages("com.solera.global.qa.mockservertest.cases")
 @ExcludePackages("com.solera.global.qa.mockservertest.cases.restassuredexample")
-public class MockServertTestSuite {
-}
+public class MockServertTestSuite {}

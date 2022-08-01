@@ -41,5 +41,4 @@ public interface LifecycleLogger {
     logger.info(() -> String.format("Finished executing [%s]", testInfo.getDisplayName()));
     logger.info(() -> "----------------------------------------------------------------\n");
   }
-
 }

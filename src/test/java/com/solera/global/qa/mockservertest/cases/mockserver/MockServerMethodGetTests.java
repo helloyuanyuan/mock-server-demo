@@ -8,18 +8,17 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockserver.model.Header;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.solera.global.qa.mockservertest.MockServerTestBase;
 import com.solera.global.qa.mockservertest.beans.Org;
-import com.solera.global.qa.mockservertest.common.junitExtension.TimingExtension;
+import com.solera.global.qa.mockservertest.common.junitAnnotation.Duration;
 import com.solera.global.qa.mockservertest.common.junitLogger.LifecycleLogger;
 
 @SpringBootTest
 @DisplayName("MockServerMethodGetTests")
-@ExtendWith(TimingExtension.class)
+@Duration
 class MockServerMethodGetTests extends MockServerTestBase implements LifecycleLogger {
 
   @BeforeAll
@@ -27,7 +26,7 @@ class MockServerMethodGetTests extends MockServerTestBase implements LifecycleLo
 
   @BeforeEach
   void beforeEach() {
-    mockServerUtils.reset();
+    resetMockServer();
   }
 
   @Test
@@ -43,7 +42,7 @@ class MockServerMethodGetTests extends MockServerTestBase implements LifecycleLo
 
     Assertions.assertThat(actualResult).isEqualTo(body);
 
-    mockServerUtils.verify("/hello", 1);
+    verifyTimes("/hello", 1);
   }
 
   @Test
@@ -68,7 +67,7 @@ class MockServerMethodGetTests extends MockServerTestBase implements LifecycleLo
     Assertions.assertThat(actualResult.getId()).isEqualTo(org.getId());
     Assertions.assertThat(actualResult.getOrgName()).isEqualTo(org.getOrgName());
 
-    mockServerUtils.verify("/org", 1);
+    verifyTimes("/org", 1);
   }
 
 }

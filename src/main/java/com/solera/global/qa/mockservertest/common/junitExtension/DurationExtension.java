@@ -8,9 +8,9 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ExtensionContext.Namespace;
 import org.junit.jupiter.api.extension.ExtensionContext.Store;
 
-public class TimingExtension implements BeforeTestExecutionCallback, AfterTestExecutionCallback {
+public class DurationExtension implements BeforeTestExecutionCallback, AfterTestExecutionCallback {
 
-  private static final Logger logger = Logger.getLogger(TimingExtension.class.getName());
+  private static final Logger logger = Logger.getLogger(DurationExtension.class.getName());
 
   private static final String START_TIME = "start time";
 

@@ -7,24 +7,23 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockserver.model.Header;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.solera.global.qa.mockservertest.MockServerTestBase;
 import com.solera.global.qa.mockservertest.beans.Org;
-import com.solera.global.qa.mockservertest.common.junitExtension.TimingExtension;
+import com.solera.global.qa.mockservertest.common.junitAnnotation.Duration;
 import com.solera.global.qa.mockservertest.common.junitLogger.LifecycleLogger;
 import io.restassured.http.ContentType;
 
 @SpringBootTest
 @DisplayName("MockServerMethodPostTests")
-@ExtendWith(TimingExtension.class)
+@Duration
 class MockServerMethodPostTests extends MockServerTestBase implements LifecycleLogger {
 
   @BeforeEach
   void beforeEach() {
-    mockServerUtils.reset();
+    resetMockServer();
   }
 
   @Test
@@ -50,7 +49,7 @@ class MockServerMethodPostTests extends MockServerTestBase implements LifecycleL
     Assertions.assertThat(actualResult.getId()).isEqualTo(org.getId());
     Assertions.assertThat(actualResult.getOrgName()).isEqualTo(org.getOrgName());
 
-    mockServerUtils.verify("/org/create", "POST");
+    verifyMethod("/org/create", "POST");
   }
 
 }

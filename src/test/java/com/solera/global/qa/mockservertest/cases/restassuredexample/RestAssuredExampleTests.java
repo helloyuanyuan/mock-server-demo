@@ -5,18 +5,17 @@ import java.io.FileNotFoundException;
 import java.util.HashMap;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.ResourceUtils;
 import com.solera.global.qa.mockservertest.MockServerTestBase;
 import com.solera.global.qa.mockservertest.beans.Org;
-import com.solera.global.qa.mockservertest.common.junitExtension.TimingExtension;
+import com.solera.global.qa.mockservertest.common.junitAnnotation.Duration;
 import com.solera.global.qa.mockservertest.common.junitLogger.LifecycleLogger;
 import io.restassured.http.ContentType;
 
 @SpringBootTest
 @DisplayName("RestAssuredExampleTests")
-@ExtendWith(TimingExtension.class)
+@Duration
 class RestAssuredExampleTests extends MockServerTestBase implements LifecycleLogger {
 
   private final String URL = "https://httpbin.org";

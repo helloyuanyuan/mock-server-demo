@@ -6,19 +6,21 @@ import static org.mockserver.model.OpenAPIDefinition.openAPI;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.solera.global.qa.mockservertest.MockServerTestBase;
-import com.solera.global.qa.mockservertest.model.SkillResult;
 import org.junit.jupiter.api.extension.BeforeTestExecutionCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.mockserver.model.Header;
+import org.openapitools.client.model.SkillResult;
 
 public class SchedulingApiV2SkillExtension extends MockServerTestBase
     implements BeforeTestExecutionCallback {
 
-  private static final SkillResult result = new SkillResult(200, "TestSkill");
-
   @Override
   public void beforeTestExecution(ExtensionContext context) throws Exception {
     resetMockServer();
+
+    SkillResult result = new SkillResult();
+    result.setId(200);
+    result.setName("Driveable");
 
     Header header = new Header("Content-Type", "application/json");
     String resultString = new ObjectMapper().writeValueAsString(result);

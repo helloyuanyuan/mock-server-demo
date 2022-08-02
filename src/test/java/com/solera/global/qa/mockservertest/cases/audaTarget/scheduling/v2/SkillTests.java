@@ -6,11 +6,11 @@ import com.solera.global.qa.mockservertest.MockServerTestBase;
 import com.solera.global.qa.mockservertest.common.junitAnnotation.Duration;
 import com.solera.global.qa.mockservertest.common.junitAnnotation.SchedulingApiV2Skill;
 import com.solera.global.qa.mockservertest.common.junitLogger.LifecycleLogger;
-import com.solera.global.qa.mockservertest.model.SkillResult;
 import io.restassured.http.Header;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.openapitools.client.model.SkillResult;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
@@ -19,10 +19,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SchedulingApiV2Skill
 class SkillTests extends MockServerTestBase implements LifecycleLogger {
 
-  SkillResult result = new SkillResult(200, "TestSkill");
+  SkillResult result = new SkillResult();
 
   @Test
   void testGetStatusCode200() throws Exception {
+    result.setId(200);
+    result.setName("Driveable");
+
     SkillResult actualResult =
         given()
             .log()

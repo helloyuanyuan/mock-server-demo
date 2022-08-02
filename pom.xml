@@ -225,6 +225,7 @@
               <configOptions>
                 <sourceFolder>src/gen/java/main</sourceFolder>
               </configOptions>
+              <skipOverwrite>true</skipOverwrite>
               <generateApis>false</generateApis>
               <generateApiTests>false</generateApiTests>
               <generateApiDocumentation>false</generateApiDocumentation>

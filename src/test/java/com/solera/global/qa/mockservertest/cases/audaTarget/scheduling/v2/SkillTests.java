@@ -3,43 +3,41 @@ package com.solera.global.qa.mockservertest.cases.audaTarget.scheduling.v2;
 import static io.restassured.RestAssured.given;
 
 import com.solera.global.qa.mockservertest.MockServerTestBase;
+import com.solera.global.qa.mockservertest.common.AuthHeader;
 import com.solera.global.qa.mockservertest.common.junitAnnotation.Duration;
-import com.solera.global.qa.mockservertest.common.junitAnnotation.SchedulingApiV2Skill;
+import com.solera.global.qa.mockservertest.common.junitExtension.SchedulingApiV2SkillExtension;
 import com.solera.global.qa.mockservertest.common.junitLogger.LifecycleLogger;
-import io.restassured.http.Header;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.openapitools.client.model.SkillResult;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 @DisplayName("AudaTarget.Scheduling.v2.SkillTests")
 @Duration
-@SchedulingApiV2Skill
+@ExtendWith(SchedulingApiV2SkillExtension.class)
 class SkillTests extends MockServerTestBase implements LifecycleLogger {
 
-  SkillResult result = new SkillResult();
+  private final String API_PATH = MOCKSERVERURL +"/api/v2/skills";
 
   @Test
   void testGetStatusCode200() throws Exception {
-    result.setId(200);
-    result.setName("Driveable");
-
     SkillResult actualResult =
         given()
             .log()
             .all()
-            .header(new Header("Authorization", "Bearer 200abcdef"))
+            .header(AuthHeader.OK.header())
             .then()
             .log()
             .all()
             .expect()
             .statusCode(200)
             .when()
-            .get(MOCKSERVERURL + "/api/v2/skills")
+            .get(API_PATH)
             .as(SkillResult.class);
-    Assertions.assertThat(actualResult).isEqualTo(result);
+    Assertions.assertThat(actualResult).isEqualTo(SchedulingApiV2SkillExtension.getDefaultResult());
   }
 
   @Test
@@ -47,13 +45,13 @@ class SkillTests extends MockServerTestBase implements LifecycleLogger {
     given()
         .log()
         .all()
-        .header(new Header("Authorization", "Bearer 401abcdef"))
+        .header(AuthHeader.UNAUTHORIZED.header())
         .then()
         .log()
         .all()
         .expect()
         .statusCode(401)
         .when()
-        .get(MOCKSERVERURL + "/api/v2/skills");
+        .get(API_PATH);
   }
 }

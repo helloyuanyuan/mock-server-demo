@@ -233,6 +233,7 @@
               <generateModelTests>false</generateModelTests>
               <generateModelDocumentation>false</generateModelDocumentation>
               <generateSupportingFiles>true</generateSupportingFiles>
+              <supportingFilesToGenerate>JSON.java</supportingFilesToGenerate>
             </configuration>
           </execution>
         </executions>

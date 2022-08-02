@@ -20,7 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @ExtendWith(SchedulingApiV2DayGetAllExtension.class)
 class DayGetAllTests extends MockServerTestBase implements LifecycleLogger {
 
-  private final String API_PATH = MOCKSERVERURL + "/api/v2/Day/GetAll";
+  private final String API_PATH = MOCK_SERVER_URL + "/api/v2/Day/GetAll";
 
   @Test
   void testGetStatusCode200() throws Exception {
@@ -28,7 +28,7 @@ class DayGetAllTests extends MockServerTestBase implements LifecycleLogger {
         given()
             .log()
             .all()
-            .header(AuthHeader.OK.header())
+            .header(AuthHeader.OK_200.header())
             .then()
             .log()
             .all()
@@ -38,7 +38,7 @@ class DayGetAllTests extends MockServerTestBase implements LifecycleLogger {
             .get(API_PATH)
             .as(DayResViewModel.class);
     Assertions.assertThat(actualResult)
-        .isEqualTo(SchedulingApiV2DayGetAllExtension.getDefaultDayResViewModel());
+        .isEqualTo(SchedulingApiV2DayGetAllExtension.getDayResViewModel());
   }
 
   @Test
@@ -46,7 +46,7 @@ class DayGetAllTests extends MockServerTestBase implements LifecycleLogger {
     given()
         .log()
         .all()
-        .header(AuthHeader.UNAUTHORIZED.header())
+        .header(AuthHeader.UNAUTHORIZED_401.header())
         .then()
         .log()
         .all()
@@ -61,7 +61,7 @@ class DayGetAllTests extends MockServerTestBase implements LifecycleLogger {
     given()
         .log()
         .all()
-        .header(AuthHeader.NOT_FOUND.header())
+        .header(AuthHeader.NOT_FOUND_404.header())
         .then()
         .log()
         .all()
@@ -76,7 +76,7 @@ class DayGetAllTests extends MockServerTestBase implements LifecycleLogger {
     given()
         .log()
         .all()
-        .header(AuthHeader.INTERNAL_SERVER_ERROR.header())
+        .header(AuthHeader.INTERNAL_SERVER_ERROR_500.header())
         .then()
         .log()
         .all()

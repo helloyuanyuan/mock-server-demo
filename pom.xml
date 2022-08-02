@@ -37,9 +37,7 @@
     <jsr311-api-version>1.1.1</jsr311-api-version>
     <javax.ws.rs-api-version>2.1.1</javax.ws.rs-api-version>
     <!-- plugin dependencies version -->
-    <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
     <junit-platform-surefire-provider.version>1.2.0</junit-platform-surefire-provider.version>
-    <aspectjweaver.version>1.8.10</aspectjweaver.version>
     <allure-maven.version>2.11.2</allure-maven.version>
     <fmt-maven-plugin.version>2.13</fmt-maven-plugin.version>
     <openapi-generator-maven-plugin.version>6.0.1</openapi-generator-maven-plugin.version>
@@ -159,32 +157,6 @@
         </configuration>
       </plugin>
       <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>${maven-surefire-plugin.version}</version>
-        <configuration>
-          <testFailureIgnore>false</testFailureIgnore>
-          <argLine>-javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"</argLine>
-          <systemProperties>
-            <property>
-              <name>junit.jupiter.extensions.autodetection.enabled</name>
-              <value>true</value>
-            </property>
-          </systemProperties>
-        </configuration>
-        <dependencies>
-          <dependency>
-            <groupId>org.junit.platform</groupId>
-            <artifactId>junit-platform-surefire-provider</artifactId>
-            <version>${junit-platform-surefire-provider.version}</version>
-          </dependency>
-          <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjweaver</artifactId>
-            <version>${aspectjweaver.version}</version>
-          </dependency>
-        </dependencies>
-      </plugin>
-      <plugin>
         <groupId>io.qameta.allure</groupId>
         <artifactId>allure-maven</artifactId>
         <version>${allure-maven.version}</version>
@@ -222,9 +194,6 @@
             <configuration>
               <inputSpec>https://services-bet.auda-target.com/Scheduling/swagger/v2/swagger.json</inputSpec>
               <generatorName>java</generatorName>
-              <configOptions>
-                <sourceFolder>src/gen/java/main</sourceFolder>
-              </configOptions>
               <skipOverwrite>true</skipOverwrite>
               <generateApis>false</generateApis>
               <generateApiTests>false</generateApiTests>

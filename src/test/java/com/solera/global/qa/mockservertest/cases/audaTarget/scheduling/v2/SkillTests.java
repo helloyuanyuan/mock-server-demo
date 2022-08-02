@@ -20,7 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @ExtendWith(SchedulingApiV2SkillExtension.class)
 class SkillTests extends MockServerTestBase implements LifecycleLogger {
 
-  private final String API_PATH = MOCKSERVERURL + "/api/v2/skills";
+  private final String API_PATH = MOCK_SERVER_URL + "/api/v2/skills";
 
   @Test
   void testGetStatusCode200() throws Exception {
@@ -28,7 +28,7 @@ class SkillTests extends MockServerTestBase implements LifecycleLogger {
         given()
             .log()
             .all()
-            .header(AuthHeader.OK.header())
+            .header(AuthHeader.OK_200.header())
             .then()
             .log()
             .all()
@@ -37,7 +37,7 @@ class SkillTests extends MockServerTestBase implements LifecycleLogger {
             .when()
             .get(API_PATH)
             .as(SkillResult.class);
-    Assertions.assertThat(actualResult).isEqualTo(SchedulingApiV2SkillExtension.getDefaultResult());
+    Assertions.assertThat(actualResult).isEqualTo(SchedulingApiV2SkillExtension.getSkillResult());
   }
 
   @Test
@@ -45,7 +45,7 @@ class SkillTests extends MockServerTestBase implements LifecycleLogger {
     given()
         .log()
         .all()
-        .header(AuthHeader.UNAUTHORIZED.header())
+        .header(AuthHeader.UNAUTHORIZED_401.header())
         .then()
         .log()
         .all()
@@ -60,7 +60,7 @@ class SkillTests extends MockServerTestBase implements LifecycleLogger {
     given()
         .log()
         .all()
-        .header(AuthHeader.NOT_FOUND.header())
+        .header(AuthHeader.NOT_FOUND_404.header())
         .then()
         .log()
         .all()

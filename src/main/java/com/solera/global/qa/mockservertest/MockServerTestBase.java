@@ -17,31 +17,33 @@ import org.mockserver.verify.VerificationTimes;
 
 public class MockServerTestBase {
 
-  protected final String HOST = PropertyUtils.getInstance().getProperty("host");
-  protected final int PORT = Integer.parseInt(PropertyUtils.getInstance().getProperty("port"));
-  protected final String OPEN_API_URL = PropertyUtils.getInstance().getProperty("openapiurl");
-  protected final String MOCK_SERVER_URL = PropertyUtils.getInstance().getUrl(HOST, PORT);
-  protected final String AUTH_HEADER = "Authorization";
-  protected final MockServerClient CLIENT = new MockServerClient(HOST, PORT);
+  protected static final String HOST = PropertyUtils.getInstance().getProperty("host");
+  protected static final int PORT =
+      Integer.parseInt(PropertyUtils.getInstance().getProperty("port"));
+  protected static final String OPEN_API_URL =
+      PropertyUtils.getInstance().getProperty("openapiurl");
+  protected static final String MOCK_SERVER_URL = PropertyUtils.getInstance().getUrl(HOST, PORT);
+  protected static final String AUTH_HEADER = "Authorization";
+  protected static final MockServerClient CLIENT = new MockServerClient(HOST, PORT);
 
-  public Header header() {
+  protected static Header header() {
     return new Header("Content-Type", ContentType.JSON.toString());
   }
 
-  public String body(Object value) throws JsonProcessingException {
+  protected static String body(Object value) throws JsonProcessingException {
     return new ObjectMapper().writeValueAsString(value);
   }
 
-  public void createOpenApiExpectation() {
+  protected static void createOpenApiExpectation() {
     CLIENT.upsert(openAPIExpectation(OPEN_API_URL));
   }
 
-  public void createOpenApiExpectation(Map<String, String> operationsAndResponses) {
+  protected static void createOpenApiExpectation(Map<String, String> operationsAndResponses) {
     CLIENT.upsert(openAPIExpectation(OPEN_API_URL, operationsAndResponses));
   }
 
-  public void createOpenApiExpectation(String operationId, Integer statusCode, Object body)
-      throws Exception {
+  protected static void createOpenApiExpectation(
+      String operationId, Integer statusCode, Object body) throws Exception {
     String bodyString = new ObjectMapper().writeValueAsString(body);
     CLIENT
         .when(openAPI(OPEN_API_URL, operationId))
@@ -52,23 +54,23 @@ public class MockServerTestBase {
                 .withBody(bodyString));
   }
 
-  public void resetMockServer() {
+  protected static void resetMockServer() {
     CLIENT.reset();
   }
 
-  public void clearMockServer(String path, ClearType clearType) {
+  protected static void clearMockServer(String path, ClearType clearType) {
     CLIENT.clear(request().withPath(path), clearType);
   }
 
-  public void verifyTimes(String path, int times) {
+  protected static void verifyTimes(String path, int times) {
     CLIENT.verify(request().withPath(path), VerificationTimes.atLeast(times));
   }
 
-  public void verifyMethod(String path, String method) {
+  protected static void verifyMethod(String path, String method) {
     CLIENT.verify(request().withPath(path).withMethod(method));
   }
 
-  public void verifyZero() {
+  protected static void verifyZero() {
     CLIENT.verifyZeroInteractions();
   }
 }

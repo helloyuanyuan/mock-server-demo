@@ -7,7 +7,7 @@ import static org.mockserver.model.OpenAPIDefinition.openAPI;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.solera.global.qa.mockservertest.common.PropertyUtils;
+import com.solera.global.qa.mockservertest.common.utils.PropertyUtils;
 import io.restassured.http.ContentType;
 import java.util.Map;
 import org.mockserver.client.MockServerClient;

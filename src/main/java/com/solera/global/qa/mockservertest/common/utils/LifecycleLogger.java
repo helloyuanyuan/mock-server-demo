@@ -1,4 +1,4 @@
-package com.solera.global.qa.mockservertest.common.junitLogger;
+package com.solera.global.qa.mockservertest.common.utils;
 
 import java.util.logging.Logger;
 import org.junit.jupiter.api.AfterAll;

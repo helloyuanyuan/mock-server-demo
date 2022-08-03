@@ -1,4 +1,4 @@
-package com.solera.global.qa.mockservertest.common;
+package com.solera.global.qa.mockservertest.enums;
 
 import io.restassured.http.Header;
 import org.mockserver.model.HttpStatusCode;

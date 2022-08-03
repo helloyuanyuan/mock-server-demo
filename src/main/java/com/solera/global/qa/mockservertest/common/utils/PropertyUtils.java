@@ -1,4 +1,4 @@
-package com.solera.global.qa.mockservertest.common;
+package com.solera.global.qa.mockservertest.common.utils;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

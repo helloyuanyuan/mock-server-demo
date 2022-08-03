@@ -1,4 +1,4 @@
-package com.solera.global.qa.mockservertest.common.junitExtension;
+package com.solera.global.qa.mockservertest.common.extensions;
 
 import java.lang.reflect.Method;
 import java.util.logging.Logger;

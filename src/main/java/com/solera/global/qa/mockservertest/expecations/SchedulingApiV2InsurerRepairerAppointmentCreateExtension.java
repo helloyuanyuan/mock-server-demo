@@ -1,4 +1,4 @@
-package com.solera.global.qa.mockservertest.common.junitExtension;
+package com.solera.global.qa.mockservertest.expecations;
 
 import static org.mockserver.model.HttpResponse.notFoundResponse;
 import static org.mockserver.model.HttpResponse.response;

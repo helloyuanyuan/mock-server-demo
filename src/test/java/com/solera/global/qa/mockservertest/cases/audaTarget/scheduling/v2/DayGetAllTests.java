@@ -3,10 +3,10 @@ package com.solera.global.qa.mockservertest.cases.audaTarget.scheduling.v2;
 import static io.restassured.RestAssured.given;
 
 import com.solera.global.qa.mockservertest.MockServerTestBase;
-import com.solera.global.qa.mockservertest.common.AuthHeader;
-import com.solera.global.qa.mockservertest.common.junitAnnotation.Duration;
-import com.solera.global.qa.mockservertest.common.junitExtension.SchedulingApiV2DayGetAllExtension;
-import com.solera.global.qa.mockservertest.common.junitLogger.LifecycleLogger;
+import com.solera.global.qa.mockservertest.common.annotations.Duration;
+import com.solera.global.qa.mockservertest.common.utils.LifecycleLogger;
+import com.solera.global.qa.mockservertest.enums.AuthHeader;
+import com.solera.global.qa.mockservertest.expecations.SchedulingApiV2DayGetAllExtension;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

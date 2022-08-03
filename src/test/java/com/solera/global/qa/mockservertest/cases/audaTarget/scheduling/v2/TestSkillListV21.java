@@ -6,25 +6,25 @@ import com.solera.global.qa.mockservertest.MockServerTestBase;
 import com.solera.global.qa.mockservertest.common.annotations.Duration;
 import com.solera.global.qa.mockservertest.common.utils.LifecycleLogger;
 import com.solera.global.qa.mockservertest.enums.AuthHeader;
-import com.solera.global.qa.mockservertest.expecations.DayGetAll;
+import com.solera.global.qa.mockservertest.expecations.audatarget.scheduling.v2.SkillListV21;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.openapitools.client.model.DayResViewModel;
+import org.openapitools.client.model.SkillResult;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-@DisplayName("audatarget.scheduling.v2.TestDayGetAll")
+@DisplayName("audatarget.scheduling.v2.SkillListV21")
 @Duration
-@ExtendWith(DayGetAll.class)
-class TestDayGetAll extends MockServerTestBase implements LifecycleLogger {
+@ExtendWith(SkillListV21.class)
+class TestSkillListV21 extends MockServerTestBase implements LifecycleLogger {
 
-  private final String API_PATH = MOCK_SERVER_URL + "/api/v2/Day/GetAll";
+  private final String API_PATH = MOCK_SERVER_URL + "/api/v2/skills";
 
   @Test
   void testGetStatusCode200() throws Exception {
-    DayResViewModel actualResult =
+    SkillResult actualResult =
         given()
             .log()
             .all()
@@ -36,8 +36,8 @@ class TestDayGetAll extends MockServerTestBase implements LifecycleLogger {
             .statusCode(200)
             .when()
             .get(API_PATH)
-            .as(DayResViewModel.class);
-    Assertions.assertThat(actualResult).isEqualTo(DayGetAll.getDayResViewModel());
+            .as(SkillResult.class);
+    Assertions.assertThat(actualResult).isEqualTo(SkillListV21.getSkillResult21());
   }
 
   @Test
@@ -66,21 +66,6 @@ class TestDayGetAll extends MockServerTestBase implements LifecycleLogger {
         .all()
         .expect()
         .statusCode(404)
-        .when()
-        .get(API_PATH);
-  }
-
-  @Test
-  void testGetStatusCode500() throws Exception {
-    given()
-        .log()
-        .all()
-        .header(AuthHeader.INTERNAL_SERVER_ERROR_500.header())
-        .then()
-        .log()
-        .all()
-        .expect()
-        .statusCode(500)
         .when()
         .get(API_PATH);
   }

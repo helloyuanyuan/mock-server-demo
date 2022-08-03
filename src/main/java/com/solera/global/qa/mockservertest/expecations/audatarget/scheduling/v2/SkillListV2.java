@@ -1,4 +1,4 @@
-package com.solera.global.qa.mockservertest.expecations;
+package com.solera.global.qa.mockservertest.expecations.audatarget.scheduling.v2;
 
 import static org.mockserver.model.HttpResponse.notFoundResponse;
 import static org.mockserver.model.HttpResponse.response;
@@ -11,7 +11,7 @@ import org.mockserver.model.HttpStatusCode;
 import org.openapitools.client.model.Skill;
 import org.openapitools.client.model.SkillResult;
 
-public class SkillList extends MockServerTestBase implements BeforeTestExecutionCallback {
+public class SkillListV2 extends MockServerTestBase implements BeforeTestExecutionCallback {
 
   public static final SkillResult getSkillResult() {
     SkillResult result = new SkillResult();

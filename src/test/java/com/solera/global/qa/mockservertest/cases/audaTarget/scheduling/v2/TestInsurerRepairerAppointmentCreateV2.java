@@ -6,7 +6,7 @@ import com.solera.global.qa.mockservertest.MockServerTestBase;
 import com.solera.global.qa.mockservertest.common.annotations.Duration;
 import com.solera.global.qa.mockservertest.common.utils.LifecycleLogger;
 import com.solera.global.qa.mockservertest.enums.AuthHeader;
-import com.solera.global.qa.mockservertest.expecations.InsurerRepairerAppointmentCreate;
+import com.solera.global.qa.mockservertest.expecations.audatarget.scheduling.v2.InsurerRepairerAppointmentCreateV2;
 import java.util.UUID;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -17,10 +17,10 @@ import org.openapitools.client.model.ValidationResultModel;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-@DisplayName("audatarget.scheduling.v2.InsurerRepairerAppointmentCreate")
+@DisplayName("audatarget.scheduling.v2.InsurerRepairerAppointmentCreateV2")
 @Duration
-@ExtendWith(InsurerRepairerAppointmentCreate.class)
-class TestInsurerRepairerAppointmentCreate extends MockServerTestBase implements LifecycleLogger {
+@ExtendWith(InsurerRepairerAppointmentCreateV2.class)
+class TestInsurerRepairerAppointmentCreateV2 extends MockServerTestBase implements LifecycleLogger {
 
   private final String API_PATH =
       MOCK_SERVER_URL + "/api/v2/insurers/{insurerId}/repairers/{repairerId}/appointments";
@@ -34,7 +34,7 @@ class TestInsurerRepairerAppointmentCreate extends MockServerTestBase implements
             .pathParam("insurerId", UUID.randomUUID())
             .pathParam("repairerId", UUID.randomUUID())
             .header(AuthHeader.OK_200.header())
-            .body(InsurerRepairerAppointmentCreate.getCreateAppointmentData())
+            .body(InsurerRepairerAppointmentCreateV2.getCreateAppointmentData())
             .then()
             .log()
             .all()
@@ -44,7 +44,7 @@ class TestInsurerRepairerAppointmentCreate extends MockServerTestBase implements
             .post(API_PATH)
             .as(SelfViewModel.class);
     Assertions.assertThat(actualResult)
-        .isEqualTo(InsurerRepairerAppointmentCreate.getSelfViewModel());
+        .isEqualTo(InsurerRepairerAppointmentCreateV2.getSelfViewModel());
   }
 
   @Test
@@ -56,7 +56,7 @@ class TestInsurerRepairerAppointmentCreate extends MockServerTestBase implements
             .pathParam("insurerId", UUID.randomUUID())
             .pathParam("repairerId", UUID.randomUUID())
             .header(AuthHeader.BAD_REQUEST_400.header())
-            .body(InsurerRepairerAppointmentCreate.getCreateAppointmentData())
+            .body(InsurerRepairerAppointmentCreateV2.getCreateAppointmentData())
             .then()
             .log()
             .all()
@@ -66,7 +66,7 @@ class TestInsurerRepairerAppointmentCreate extends MockServerTestBase implements
             .post(API_PATH)
             .as(ValidationResultModel.class);
     Assertions.assertThat(actualResult)
-        .isEqualTo(InsurerRepairerAppointmentCreate.getValidationResultModel());
+        .isEqualTo(InsurerRepairerAppointmentCreateV2.getValidationResultModel());
   }
 
   @Test
@@ -78,7 +78,7 @@ class TestInsurerRepairerAppointmentCreate extends MockServerTestBase implements
             .pathParam("insurerId", UUID.randomUUID())
             .pathParam("repairerId", UUID.randomUUID())
             .header(AuthHeader.UNAUTHORIZED_401.header())
-            .body(InsurerRepairerAppointmentCreate.getCreateAppointmentData())
+            .body(InsurerRepairerAppointmentCreateV2.getCreateAppointmentData())
             .then()
             .log()
             .all()
@@ -88,7 +88,7 @@ class TestInsurerRepairerAppointmentCreate extends MockServerTestBase implements
             .post(API_PATH)
             .as(ValidationResultModel.class);
     Assertions.assertThat(actualResult)
-        .isEqualTo(InsurerRepairerAppointmentCreate.getValidationResultModel());
+        .isEqualTo(InsurerRepairerAppointmentCreateV2.getValidationResultModel());
   }
 
   @Test
@@ -99,7 +99,7 @@ class TestInsurerRepairerAppointmentCreate extends MockServerTestBase implements
         .pathParam("insurerId", UUID.randomUUID())
         .pathParam("repairerId", UUID.randomUUID())
         .header(AuthHeader.NOT_FOUND_404.header())
-        .body(InsurerRepairerAppointmentCreate.getCreateAppointmentData())
+        .body(InsurerRepairerAppointmentCreateV2.getCreateAppointmentData())
         .then()
         .log()
         .all()
@@ -118,7 +118,7 @@ class TestInsurerRepairerAppointmentCreate extends MockServerTestBase implements
             .pathParam("insurerId", UUID.randomUUID())
             .pathParam("repairerId", UUID.randomUUID())
             .header(AuthHeader.CONFLICT_409.header())
-            .body(InsurerRepairerAppointmentCreate.getCreateAppointmentData())
+            .body(InsurerRepairerAppointmentCreateV2.getCreateAppointmentData())
             .then()
             .log()
             .all()
@@ -128,7 +128,7 @@ class TestInsurerRepairerAppointmentCreate extends MockServerTestBase implements
             .post(API_PATH)
             .as(ValidationResultModel.class);
     Assertions.assertThat(actualResult)
-        .isEqualTo(InsurerRepairerAppointmentCreate.getValidationResultModel());
+        .isEqualTo(InsurerRepairerAppointmentCreateV2.getValidationResultModel());
   }
 
   @Test
@@ -140,7 +140,7 @@ class TestInsurerRepairerAppointmentCreate extends MockServerTestBase implements
             .pathParam("insurerId", UUID.randomUUID())
             .pathParam("repairerId", UUID.randomUUID())
             .header(AuthHeader.UNPROCESSABLE_ENTITY_422.header())
-            .body(InsurerRepairerAppointmentCreate.getCreateAppointmentData())
+            .body(InsurerRepairerAppointmentCreateV2.getCreateAppointmentData())
             .then()
             .log()
             .all()
@@ -150,6 +150,6 @@ class TestInsurerRepairerAppointmentCreate extends MockServerTestBase implements
             .post(API_PATH)
             .as(ValidationResultModel.class);
     Assertions.assertThat(actualResult)
-        .isEqualTo(InsurerRepairerAppointmentCreate.getValidationResultModel());
+        .isEqualTo(InsurerRepairerAppointmentCreateV2.getValidationResultModel());
   }
 }

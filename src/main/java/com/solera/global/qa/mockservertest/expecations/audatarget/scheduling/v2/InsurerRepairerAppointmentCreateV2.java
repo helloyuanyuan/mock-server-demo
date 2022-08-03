@@ -1,4 +1,4 @@
-package com.solera.global.qa.mockservertest.expecations;
+package com.solera.global.qa.mockservertest.expecations.audatarget.scheduling.v2;
 
 import static org.mockserver.model.HttpResponse.notFoundResponse;
 import static org.mockserver.model.HttpResponse.response;
@@ -13,7 +13,7 @@ import org.openapitools.client.model.CreateAppointmentData;
 import org.openapitools.client.model.SelfViewModel;
 import org.openapitools.client.model.ValidationResultModel;
 
-public class InsurerRepairerAppointmentCreate extends MockServerTestBase
+public class InsurerRepairerAppointmentCreateV2 extends MockServerTestBase
     implements BeforeTestExecutionCallback {
 
   public static final CreateAppointmentData getCreateAppointmentData() {

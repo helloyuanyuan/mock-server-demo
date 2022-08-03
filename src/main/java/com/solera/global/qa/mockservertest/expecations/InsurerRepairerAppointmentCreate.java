@@ -13,7 +13,7 @@ import org.openapitools.client.model.CreateAppointmentData;
 import org.openapitools.client.model.SelfViewModel;
 import org.openapitools.client.model.ValidationResultModel;
 
-public class SchedulingApiV2InsurerRepairerAppointmentCreateExtension extends MockServerTestBase
+public class InsurerRepairerAppointmentCreate extends MockServerTestBase
     implements BeforeTestExecutionCallback {
 
   public static final CreateAppointmentData getCreateAppointmentData() {

@@ -5,6 +5,6 @@ import org.junit.platform.suite.api.Suite;
 import org.junit.platform.suite.api.SuiteDisplayName;
 
 @Suite
-@SuiteDisplayName("AudaTarget Scheduling Api V2 Mock Server Test")
+@SuiteDisplayName("Mock Server Test")
 @SelectPackages("com.solera.global.qa.mockservertest.cases")
 public class MockServertTestSuite {}

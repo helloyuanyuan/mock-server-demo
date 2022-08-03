@@ -1,4 +1,4 @@
-package com.audatarget.scheduling.v2.expecations;
+package com.audatarget.scheduling.expecations.v2;
 
 import static org.mockserver.model.HttpResponse.notFoundResponse;
 import static org.mockserver.model.HttpResponse.response;

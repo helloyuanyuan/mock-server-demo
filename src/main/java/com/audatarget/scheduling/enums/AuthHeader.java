@@ -1,4 +1,4 @@
-package com.audatarget.scheduling.common.enums;
+package com.audatarget.scheduling.enums;
 
 import io.restassured.http.Header;
 import org.mockserver.model.HttpStatusCode;

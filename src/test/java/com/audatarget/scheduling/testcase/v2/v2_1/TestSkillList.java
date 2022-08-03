@@ -1,12 +1,12 @@
-package com.audatarget.scheduling.v2.testcases.v2_1;
+package com.audatarget.scheduling.testcase.v2.v2_1;
 
 import static io.restassured.RestAssured.given;
 
 import com.audatarget.scheduling.MockServerTestBase;
 import com.audatarget.scheduling.common.annotations.Duration;
-import com.audatarget.scheduling.common.enums.AuthHeader;
 import com.audatarget.scheduling.common.utils.LifecycleLogger;
-import com.audatarget.scheduling.v2.expecations.v2_1.SkillList;
+import com.audatarget.scheduling.enums.AuthHeader;
+import com.audatarget.scheduling.expecations.v2.v2_1.SkillList;
 import com.audatarget.scheduling.v2.model.SkillResult;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

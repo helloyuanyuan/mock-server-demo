@@ -1,12 +1,12 @@
-package com.audatarget.scheduling.v2.testcases;
+package com.audatarget.scheduling.testcase.v2;
 
 import static io.restassured.RestAssured.given;
 
 import com.audatarget.scheduling.MockServerTestBase;
 import com.audatarget.scheduling.common.annotations.Duration;
-import com.audatarget.scheduling.common.enums.AuthHeader;
 import com.audatarget.scheduling.common.utils.LifecycleLogger;
-import com.audatarget.scheduling.v2.expecations.InsurerRepairerAppointmentCreate;
+import com.audatarget.scheduling.enums.AuthHeader;
+import com.audatarget.scheduling.expecations.v2.InsurerRepairerAppointmentCreate;
 import com.audatarget.scheduling.v2.model.SelfViewModel;
 import com.audatarget.scheduling.v2.model.ValidationResultModel;
 import java.util.UUID;

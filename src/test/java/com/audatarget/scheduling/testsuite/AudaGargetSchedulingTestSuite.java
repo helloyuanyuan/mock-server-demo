@@ -7,4 +7,4 @@ import org.junit.platform.suite.api.SuiteDisplayName;
 @Suite
 @SuiteDisplayName("AudaTarget Scheduling API - Mock Server Test")
 @SelectPackages("com.audatarget.scheduling")
-public class MockServertTestSuite {}
+public class AudaGargetSchedulingTestSuite {}

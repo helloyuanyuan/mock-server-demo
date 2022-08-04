@@ -1,12 +1,12 @@
-package com.audatarget.scheduling.testcase.v2.v2_1;
+package com.audatarget.scheduling.openapitest.testcase.v2;
 
 import static io.restassured.RestAssured.given;
 
 import com.audatarget.scheduling.MockServerTestBase;
 import com.audatarget.scheduling.common.annotations.Duration;
+import com.audatarget.scheduling.common.enums.AuthHeader;
 import com.audatarget.scheduling.common.utils.LifecycleLogger;
-import com.audatarget.scheduling.enums.AuthHeader;
-import com.audatarget.scheduling.expecations.v2.v2_1.SkillList;
+import com.audatarget.scheduling.expecations.v2.SkillList;
 import com.audatarget.scheduling.v2.model.SkillResult;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -15,7 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-@DisplayName("audatarget.scheduling.v2_1.SkillList")
+@DisplayName("audatarget.scheduling.v2.SkillList")
 @Duration
 @ExtendWith(SkillList.class)
 class TestSkillList extends MockServerTestBase implements LifecycleLogger {
@@ -37,7 +37,7 @@ class TestSkillList extends MockServerTestBase implements LifecycleLogger {
             .when()
             .get(API_PATH)
             .as(SkillResult.class);
-    Assertions.assertThat(actualResult).isEqualTo(SkillList.getSkillResult21());
+    Assertions.assertThat(actualResult).isEqualTo(SkillList.getSkillResult());
   }
 
   @Test

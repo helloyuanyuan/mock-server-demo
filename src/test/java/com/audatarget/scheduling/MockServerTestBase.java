@@ -17,15 +17,17 @@ import org.mockserver.verify.VerificationTimes;
 
 public class MockServerTestBase {
 
-  protected static final String HOST = PropertyUtils.getInstance().getProperty("host");
-  protected static final int PORT =
-      Integer.parseInt(PropertyUtils.getInstance().getProperty("port"));
+  protected static final String AUTH_HEADER = "Authorization";
+
   protected static final String V1_OPEN_API_URL =
       PropertyUtils.getInstance().getProperty("v1openapiurl");
   protected static final String V2_OPEN_API_URL =
       PropertyUtils.getInstance().getProperty("v2openapiurl");
+
+  protected static final String HOST = PropertyUtils.getInstance().getProperty("host");
+  protected static final int PORT =
+      Integer.parseInt(PropertyUtils.getInstance().getProperty("port"));
   protected static final String MOCK_SERVER_URL = PropertyUtils.getInstance().getUrl(HOST, PORT);
-  protected static final String AUTH_HEADER = "Authorization";
   protected static final MockServerClient CLIENT = new MockServerClient(HOST, PORT);
 
   protected static Header header() {

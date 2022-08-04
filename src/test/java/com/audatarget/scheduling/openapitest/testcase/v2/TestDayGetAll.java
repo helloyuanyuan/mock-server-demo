@@ -1,13 +1,13 @@
-package com.audatarget.scheduling.testcase.v2;
+package com.audatarget.scheduling.openapitest.testcase.v2;
 
 import static io.restassured.RestAssured.given;
 
 import com.audatarget.scheduling.MockServerTestBase;
 import com.audatarget.scheduling.common.annotations.Duration;
+import com.audatarget.scheduling.common.enums.AuthHeader;
 import com.audatarget.scheduling.common.utils.LifecycleLogger;
-import com.audatarget.scheduling.enums.AuthHeader;
-import com.audatarget.scheduling.expecations.v2.SkillList;
-import com.audatarget.scheduling.v2.model.SkillResult;
+import com.audatarget.scheduling.expecations.v2.DayGetAll;
+import com.audatarget.scheduling.v2.model.DayResViewModel;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,16 +15,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-@DisplayName("audatarget.scheduling.v2.SkillList")
+@DisplayName("audatarget.scheduling.v2.DayGetAll")
 @Duration
-@ExtendWith(SkillList.class)
-class TestSkillList extends MockServerTestBase implements LifecycleLogger {
+@ExtendWith(DayGetAll.class)
+class TestDayGetAll extends MockServerTestBase implements LifecycleLogger {
 
-  private final String API_PATH = MOCK_SERVER_URL + "/api/v2/skills";
+  private final String API_PATH = MOCK_SERVER_URL + "/api/v2/Day/GetAll";
 
   @Test
   void testGetStatusCode200() throws Exception {
-    SkillResult actualResult =
+    DayResViewModel actualResult =
         given()
             .log()
             .all()
@@ -36,8 +36,8 @@ class TestSkillList extends MockServerTestBase implements LifecycleLogger {
             .statusCode(200)
             .when()
             .get(API_PATH)
-            .as(SkillResult.class);
-    Assertions.assertThat(actualResult).isEqualTo(SkillList.getSkillResult());
+            .as(DayResViewModel.class);
+    Assertions.assertThat(actualResult).isEqualTo(DayGetAll.getDayResViewModel());
   }
 
   @Test
@@ -66,6 +66,21 @@ class TestSkillList extends MockServerTestBase implements LifecycleLogger {
         .all()
         .expect()
         .statusCode(404)
+        .when()
+        .get(API_PATH);
+  }
+
+  @Test
+  void testGetStatusCode500() throws Exception {
+    given()
+        .log()
+        .all()
+        .header(AuthHeader.INTERNAL_SERVER_ERROR_500.header())
+        .then()
+        .log()
+        .all()
+        .expect()
+        .statusCode(500)
         .when()
         .get(API_PATH);
   }
